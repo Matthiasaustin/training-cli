@@ -1,5 +1,19 @@
 import os
+import logging
 import click
+
+logger = logging.getLogger(__name__)
+formatter = logging.Formatter('%(asctime)s:%(name)s:%(message)s')
+
+file_handler = logging.FileHandler('training_cli.log')
+stream_handler = logging.StreamHandler()
+
+file_handler.setFormatter(formatter)
+stream_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+logger.addHandler(stream_handler)
+
 
 class ComplexCLI(click.MultiCommand):
     def list_commands(self, ctx):
@@ -16,6 +30,7 @@ class ComplexCLI(click.MultiCommand):
         try:
             mod = __import__(f"training.commands.cmd_{name}", None, None, ["cli"])
         except ImportError:
+            logger.exception("Import Error has occurred.")
             return
         return mod.cli
 
