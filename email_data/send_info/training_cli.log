@@ -1,0 +1,7 @@
+2021-03-21 15:28:57,338:training.cli:Import Error has occurred.
+Traceback (most recent call last):
+  File "/home/matthias/Documents/code/training-cli/training/cli.py", line 31, in get_command
+    mod = __import__(f"training.commands.cmd_{name}", None, None, ["cli"])
+  File "/home/matthias/Documents/code/training-cli/training/commands/cmd_email.py", line 2, in <module>
+    from services import svc_email as email
+ModuleNotFoundError: No module named 'services'
