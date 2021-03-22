@@ -20,10 +20,10 @@ if __name__ == "__main__":
     send_info()
 
 # WA Data Credentials
-WA_DATA_USER_NAME = input(
-    "What username would you like to use for WA Data?\nUsername: "
-)
-WA_DATA_PASSWORD = getpass(
-    "What password would you like to use for WA Data?\nPassword: "
-)
-WA_DATA_API_KEY = getpass("What api key would you like to use for WA Data?\nAPI Key: ")
+# WA_DATA_USER_NAME = input(
+#     "What username would you like to use for WA Data?\nUsername: "
+# )
+# WA_DATA_PASSWORD = getpass(
+#     "What password would you like to use for WA Data?\nPassword: "
+# )
+# WA_DATA_API_KEY = getpass("What api key would you like to use for WA Data?\nAPI Key: ")

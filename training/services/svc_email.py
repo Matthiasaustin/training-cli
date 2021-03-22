@@ -1,4 +1,4 @@
-# import win32com.client as win32
+import win32com.client as win32
 import pandas as pd
 import jinja2
 from pathlib import Path
@@ -8,6 +8,8 @@ import re
 from datetime import datetime, timedelta
 import config
 
+main_dir = config.main_path()
+templates_dir = main_dir / "email_data/templates"
 
 class Message:
     def __init__(self, df_row):
@@ -17,8 +19,7 @@ class Message:
         self.attachment = None
         self.template = ""
         self.outputText = "None has been specified. Please run a constructor"
-
-        templateLoader = jinja2.FileSystemLoader(searchpath="../email_data/templates")
+        templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
 
     def cpr_start_email(self):
@@ -32,7 +33,7 @@ class Message:
         date = datetime.now()
         date = date.strftime("%m/%d/%Y")
         self.subject = f"CPR/First Aid Required - {date}"
-        templateLoader = jinja2.FileSystemLoader(searchpath="../email_data/templates")
+        templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         template = templateEnv.get_template(self.template_file)
         name = self.name
@@ -51,7 +52,7 @@ class Message:
 
         self.subject = f"CPR/First Aid Reminder - {date}"
         self.status = str(self.recipient["Status"])
-        templateLoader = jinja2.FileSystemLoader(searchpath="../email_data/templates")
+        templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         template = templateEnv.get_template(self.template_file)
         name = self.name
@@ -74,7 +75,7 @@ class Message:
         self.subject = f"Welcome to the {self.month} 40hr Core"
         self.username = str(self.recipient["username"])
         self.password = str(self.recipient["password"])
-        templateLoader = jinja2.FileSystemLoader(searchpath="../email_data/templates")
+        templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         self.template = templateEnv.get_template(self.template_file)
         name = self.name
@@ -102,7 +103,7 @@ class Message:
         self.subject = f"Training Reminder/Update - {date}"
         self.template_file = "reminder_40hr.html"
         # update_info = update_info.to_html()
-        templateLoader = jinja2.FileSystemLoader(searchpath="../email_data/templates")
+        templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         name = self.name
         month = self.month
@@ -158,7 +159,7 @@ class Message:
         self.subject = f"March Virtual Peer Coaching Class Information"
         self.username = str(self.recipient["username"])
         self.password = str(self.recipient["password"])
-        templateLoader = jinja2.FileSystemLoader(searchpath="../email_data/templates")
+        templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         self.template = templateEnv.get_template(self.template_file)
         name = self.name
