@@ -1,33 +1,38 @@
 import click
-
-
-class Context:
-    def __init__(self, month):
-        self.month = month
+from training.services import svc_report_data as data
+from training.services import svc_report_maker as report_maker
+from training.services import svc_reporter as reporter
 
 @click.group()
-@click.option("-m","--month", type=str, help="Month of course you want reported.")
-@click.pass_context
-def cli(ctx):
-    """Run course reports for Moodle Completion csv's"""
-    ctx.obj = Context(month)
+def cli():
+    """Course report options for 40hr Moodle Courses"""
     pass
 
-@click.command()
-@click.pass_context
-def run_full_report(ctx):
-    """Run course reports for all months."""
-    pass
+@cli.command()
+def grade_courses():
+    """Open all courses listed in course_id.csv to course report page at dstrainings for grading.
+    Must be logged in prior."""
+    data.grade_courses()
 
-@click.command()
-@click.pass_context
-def run_single_month(ctx):
-    """Run a course report for a given month"""
-    month = ctx.obj.month
-    pass
 
-@click.command()
-@click.pass_context
-def run_report_remind(ctx):
-    """Run the all months and prepare reminder emails for staff not finished."""
-    pass
+@cli.command()
+def get_files():
+    """Gets all course completion reports from dstrainings.com as csv.
+    Must be logged in prior."""
+    data.get_csv()
+
+
+@cli.command()
+@click.option("-c", "--get_csv", is_flag=True, help="Flag that, when enabled, downloads course completion csv files.")
+@click.option("-e", "--export_combined", is_flag=True, help="Flag that, when enabled, exports a combined csv for each month. Can be used for email status updates.")
+def full_run(get_csv, export_combined):
+    """Takes all completion reports from Downloads file, combines as needed and
+    moves to archive (Data{Date})"""
+    reporter.main_program(get_csv, export_combined)
+
+
+@cli.command()
+@click.option("-e", "--export_combined", is_flag=True, help="Flag that, when enabled, exports a combined csv for each month. Can be used for email status updates.")
+def single_course(get_csv, export_combined):
+    """Run a single report, assuming one month of files is in either downloads or data directories. Often for troubleshooting or rechecking."""
+    reporter.run_single_report()

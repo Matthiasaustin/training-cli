@@ -1,0 +1,18 @@
+Hello {{name}},
+
+This is your regular update regarding your progress through your assigned courses.
+
+Progress to date:
+
+# Insert Progress info here
+
+Please note you have {days_left} days left to complete your trainings.
+
+Let me know if you have any questions,
+
+Matthias Austin
+
+Training Coordinator
+DS Training Team
+Volunteers of America Western Washington | voaww.org
+contact me: maustin@voaww.org | training@voaww.org
