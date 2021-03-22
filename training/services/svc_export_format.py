@@ -110,10 +110,7 @@ class formats:
         }
 
     def date_format(self):
-        return {
-            "type": "time_period",
-            "num_format": "%mm/%dd/%yy"
-        }
+        return {"type": "time_period", "num_format": "%mm/%dd/%yy"}
 
     def date(self):
         return {

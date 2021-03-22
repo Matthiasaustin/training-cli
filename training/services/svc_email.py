@@ -8,6 +8,7 @@ import re
 from datetime import datetime, timedelta
 import config
 
+
 class Message:
     def __init__(self, df_row):
         self.name = ""
@@ -40,9 +41,10 @@ class Message:
         self.outputText = template.render(
             name=name, link=link, close_date=close_date  # Include args for render
         )
+
     def cpr_reminder(self):
         self.cpr_start_email()
-        self.template_file = 'cpr_reminder_email.html'
+        self.template_file = "cpr_reminder_email.html"
 
         date = datetime.now()
         date = date.strftime("%m/%d/%Y")
@@ -57,7 +59,8 @@ class Message:
         status = self.status
         close_date = self.close_date
         self.outputText = template.render(
-            name=name, link=link, close_date=close_date, status=self.status)  # Include args for render
+            name=name, link=link, close_date=close_date, status=self.status
+        )  # Include args for render
 
     def fhr_start_email(self):
         self.email = str(self.recipient["email"])
@@ -86,7 +89,9 @@ class Message:
         )
 
     def fhr_reminder_email(self):
-        update_path = os.path.abspath("../email_data/send_info/march_combined_update.csv")
+        update_path = os.path.abspath(
+            "../email_data/send_info/march_combined_update.csv"
+        )
         update_df = pd.read_csv(update_path)
         update_info = update_df.loc[
             update_df["Email address"] == self.recipient["email"]
@@ -101,26 +106,38 @@ class Message:
         templateEnv = jinja2.Environment(loader=templateLoader)
         name = self.name
         month = self.month
-        update_info = update_info.loc(axis=1)["Chapter 1",
-                                       "Chapter 2",
-                                       "Chapter 3",
-                                       "Chapter 4",
-                                       "Chapter 5",
-                                       "Chapter 6",
-                                       "Chapter 7",
-                                       "Chapter 8",
-                                       "Chapter 9",
-                                       "Chapter 10",
-                                       "Chapter 11",
-                                       "Chapter 12",
-                                       "Chapter 13",
-                                       "Chapter 14"]
+        update_info = update_info.loc(axis=1)[
+            "Chapter 1",
+            "Chapter 2",
+            "Chapter 3",
+            "Chapter 4",
+            "Chapter 5",
+            "Chapter 6",
+            "Chapter 7",
+            "Chapter 8",
+            "Chapter 9",
+            "Chapter 10",
+            "Chapter 11",
+            "Chapter 12",
+            "Chapter 13",
+            "Chapter 14",
+        ]
         update_info = update_info.transpose().to_html()
-        update_info = re.sub("<td>Not Started","<td style=\"background: orange;\">Not Started",update_info)
-        update_info = re.sub("<td>Started","<td style=\"background: yellow;\">Started",update_info)
-        update_info = re.sub("<td>\d.*:\d\d","<td style=\"background: green;\">Finished<\/td>",update_info)
-        update_info = re.sub("th>\d<\/th|th>\d\d<\/th","th>Status<\/th", update_info)
-        update_info = re.sub("th><\/th","th>Chapter<\/th",update_info)
+        update_info = re.sub(
+            "<td>Not Started",
+            '<td style="background: orange;">Not Started',
+            update_info,
+        )
+        update_info = re.sub(
+            "<td>Started", '<td style="background: yellow;">Started', update_info
+        )
+        update_info = re.sub(
+            "<td>\d.*:\d\d",
+            '<td style="background: green;">Finished<\/td>',
+            update_info,
+        )
+        update_info = re.sub("th>\d<\/th|th>\d\d<\/th", "th>Status<\/th", update_info)
+        update_info = re.sub("th><\/th", "th>Chapter<\/th", update_info)
         self.template = templateEnv.get_template(self.template_file)
         self.outputText = self.template.render(
             name=name,  # Include args for render
@@ -154,6 +171,7 @@ class Message:
             username=username,
             password=password,
         )
+
     def peer_coaching_reminder(self):
         self.email = str(self.recipient["email"])
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
@@ -188,7 +206,7 @@ def make_email(recipient, message_type):
 
     if message_type == "cpr":
         message.cpr_start_email()
-    elif message_type == 'cprR':
+    elif message_type == "cprR":
         message.cpr_reminder()
     elif message_type == "start40":
         message.fhr_start_email()
@@ -214,13 +232,15 @@ def make_email(recipient, message_type):
 # import_address
 def start(csv_name=None, message_type=None):
     PATH = config.send_info()
-    files = PATH.glob('*.csv')# print(files)
+    files = PATH.glob("*.csv")  # print(files)
 
     if csv_name is None:
         for f in files:
             f = Path(f)
             print(f.name)
-        csv_name= input("What file to use? - Use the full name until '.csv'\nChoice:  ")
+        csv_name = input(
+            "What file to use? - Use the full name until '.csv'\nChoice:  "
+        )
     else:
         csv_name = csv_name
 
@@ -252,4 +272,4 @@ def start(csv_name=None, message_type=None):
 
 if __name__ == "__main__":
     start()
-    start('test1.csv', 'cpr')
+    start("test1.csv", "cpr")

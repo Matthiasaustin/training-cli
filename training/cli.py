@@ -3,9 +3,9 @@ import logging
 import click
 
 logger = logging.getLogger(__name__)
-formatter = logging.Formatter('%(asctime)s:%(name)s:%(message)s')
+formatter = logging.Formatter("%(asctime)s:%(name)s:%(message)s")
 
-file_handler = logging.FileHandler('training_cli.log')
+file_handler = logging.FileHandler("training_cli.log")
 stream_handler = logging.StreamHandler()
 
 file_handler.setFormatter(formatter)
@@ -18,7 +18,9 @@ logger.addHandler(stream_handler)
 class ComplexCLI(click.MultiCommand):
     def list_commands(self, ctx):
         commands = []
-        commands_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "commands"))
+        commands_folder = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "commands")
+        )
         for filename in os.listdir(commands_folder):
             if filename.endswith(".py") and filename.startswith("cmd_"):
                 commands.append(filename.replace("cmd_", "").replace(".py", ""))

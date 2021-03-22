@@ -29,11 +29,11 @@ def main_program(get_csv=None, export_combined=None):
         if get_csv.lower() == "y":
             data.get_csv()
             input("press any key when finished downloading.")
-    elif get_csv == 'y':
+    elif get_csv == "y":
         data.get_csv()
         input("press any key when finished downloading.")
-    elif get_csv != 'y' and get_csv is not None:
-        raise Exception('Unknown Input for get_csv.')
+    elif get_csv != "y" and get_csv is not None:
+        raise Exception("Unknown Input for get_csv.")
     else:
         print("Not getting csv files.")
         pass
@@ -42,9 +42,8 @@ def main_program(get_csv=None, export_combined=None):
     date = datetime.now().strftime("%Y%m%d")
     current_month = datetime.now().date().strftime("%B").lower()
 
-
     # make a directory for the data from today
-    archive_dir = data_dir / f'Data{date}'
+    archive_dir = data_dir / f"Data{date}"
     try:
         Path(archive_dir).mkdir(exist_ok=True)
         print("Folder Made")
@@ -52,13 +51,13 @@ def main_program(get_csv=None, export_combined=None):
         print("Folder Already Made")
         pass
     else:
-        print('Folder Made, Ready.')
+        print("Folder Made, Ready.")
     rerun = True
     records = []
     while rerun:
         # assign archive folder
         archive = main_dir / f"data/Data{date}"
-        download_dir = Path.home() / 'Downloads'
+        download_dir = Path.home() / "Downloads"
 
         download_files = download_dir.glob("completion-*")
         months = []
@@ -75,7 +74,7 @@ def main_program(get_csv=None, export_combined=None):
             for f in data_files:
                 shutil.move(f, archive)
         rerun = input("Rerun? yes or no\n").lower()
-        if rerun.lower() == 'yes' or rerun.lower() == 'y':
+        if rerun.lower() == "yes" or rerun.lower() == "y":
             print(rerun)
             rerun = True
         else:
@@ -86,12 +85,11 @@ def main_program(get_csv=None, export_combined=None):
         print("Nothing to combine.")
 
 
-
 def run_single_report(export_combined=None):
-    data_dir = main_dir / 'data'
+    data_dir = main_dir / "data"
     date = datetime.now().strftime("%Y%m%d")
-    download_dir = Path.home() / 'Downloads'
-    downloads = download_dir.glob('completion-*')
+    download_dir = Path.home() / "Downloads"
+    downloads = download_dir.glob("completion-*")
     files = glob.glob(downloads)
     months = []
     month = input("Month?\n").lower()

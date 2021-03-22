@@ -127,14 +127,14 @@ def combine_report(df_list):
                 # print(report,"\n****\n")
             if name not in report.values:
                 report = report.append(df)
-                report.reset_index(drop=True,inplace=True)
+                report.reset_index(drop=True, inplace=True)
 
     report.fillna(value="Not Enrolled", inplace=True)
 
     return report
 
 
-def parse_data(list_of_df, export_combined = None):
+def parse_data(list_of_df, export_combined=None):
     new_df_list = []
     class_records = list_of_df
     for course in class_records:
@@ -165,7 +165,7 @@ def parse_data(list_of_df, export_combined = None):
             voa_report = voa_report.append(row, ignore_index=True)
     course_reports = [sola_report, voa_report]
     if export_combined is not None:
-        data.export_as_csv(course_report,"export/", "combined")
+        data.export_as_csv(course_report, "export/", "combined")
     return course_reports
 
 
