@@ -1,10 +1,17 @@
 import unittest
 from pathlib import Path
+import pandas as pd
 
 from training.services import svc_report_data as data
 
 
 class TestData(unittest.TestCase):
+    def setUp(self):
+        # pandas dataframe with example data
+
+        #save csv from df to test import
+        pass
+
     def test_get_month(self):
         """
         Test that the regex pulls the correct month.

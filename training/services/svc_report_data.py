@@ -68,6 +68,7 @@ def import_path(month, data_dir, download_dir):
 
 
 def get_month(file_path):
+    '''Takes filename from Moodle Completion report and finds the month in the file name.'''
     file = file_path
     pattern = re.compile(r'.*(completion)-(\w*)_(chapter).*')
     month = pattern.sub(r'\2',str(file))
