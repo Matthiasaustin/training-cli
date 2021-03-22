@@ -1,4 +1,3 @@
-import win32com.client as win32
 import pandas as pd
 import jinja2
 from pathlib import Path
@@ -7,6 +6,12 @@ import glob
 import re
 from datetime import datetime, timedelta
 import config
+
+try:
+    import win32com.client as win32
+except:
+    print("Can't import win32com")
+    pass
 
 main_dir = config.main_path()
 templates_dir = main_dir / "email_data/templates"

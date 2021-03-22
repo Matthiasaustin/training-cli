@@ -9,6 +9,7 @@ def cli():
 
 @cli.command()
 def cpr():
+    """Put together a due date list for staff CPR"""
     due_date.get_due_date_list(report_type="CPR")
 
 
