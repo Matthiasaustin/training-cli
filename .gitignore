@@ -7,4 +7,7 @@
 *.pdf
 /email_data/send_info/*.csv
 /data/*.csv
+/data/Archive/*.csv
 *.docx
+/export/
+/data/

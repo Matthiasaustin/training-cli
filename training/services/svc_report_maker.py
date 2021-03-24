@@ -3,6 +3,7 @@ import cProfile
 import numpy as np
 import training.services.svc_report_data as data
 from datetime import datetime
+import config
 
 # hour_checker
 
@@ -20,7 +21,7 @@ static_headers = [
     "Month",
 ]
 
-
+main_dir = config.main_path()
 # percent_check
 
 
@@ -165,7 +166,8 @@ def parse_data(list_of_df, export_combined=None):
             voa_report = voa_report.append(row, ignore_index=True)
     course_reports = [sola_report, voa_report]
     if export_combined is not None:
-        data.export_as_csv(course_report, "export/", "combined")
+        export_dir = main_dir / "export"
+        data.export_as_csv(course_report, export_dir, "combined")
     return course_reports
 
 

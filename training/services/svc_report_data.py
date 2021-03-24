@@ -53,7 +53,6 @@ def get_csv():
 
 def import_path(month, data_dir, download_dir):
 
-    print(download_dir)
     files = download_dir.glob(f"completion-{month}*")
     fx = []
     for f in files:
@@ -67,18 +66,22 @@ def import_path(month, data_dir, download_dir):
 
     # Sorts the list for easier handling later
     path_list.sort()
+    print(path_list)
 
     return path_list
 
 
 def get_month(file_path):
     file = file_path
-    month = re.search(r"-(.*?)_c", str(file))
-    month = month.group()
-    month = month.replace("-", "")
-    month = month.replace("_c", "")
+    print("Beginning:",file)
+    pattern = re.compile(r'.*(completion)-(\w*)_(chapter).*')
+    month = pattern.sub(r'\2',str(file))
+    # month = re.search(r"-(\w*?)_chapter", str(file))
+    # month = month.group()
+    # month = month.replace("-", "")
+    # month = month.replace("_chapter", "")
     month.strip()
-
+    print("End:", month)
     return month
 
 
@@ -107,8 +110,6 @@ def import_csvs(path_list):
     imported_csv = []
     chapters_imported = []
     for file in path_list:
-        print(file)
-        print(str(file.name),"*")
         # reviews the path and pulls out the chapter numbers
         chapter_number = re.search("chapter_\d\d", str(file))
         chapter_number = chapter_number.group()
@@ -117,6 +118,7 @@ def import_csvs(path_list):
         new_csv = pd.read_csv(file, parse_dates=["Course complete"], dayfirst=True)
         new_csv.fillna("Incomplete", inplace=True)
         month = get_month(file)
+        print("1:",month)
         new_csv["Chapter"] = chapter_number
         new_csv["Month"] = month
 
@@ -147,7 +149,7 @@ def export_as_csv(df, export_dir, style="institutions"):
                     institution = d.loc[0, "Institution"]
                     institution = institution.lower()
                     filename = f"{institution}_status_update_{dt}.csv"
-                    export = os.path.join(export_dir, filename)
+                    export = export_dir / filename
                     d.to_csv(export, index=False)
                 except Exception:
                     print("Something is wrong in export_as_csv w/ Range")
@@ -167,10 +169,10 @@ def export_to_excel(df_list):
 
     # Gets month from course report and looks up recorded start date
     month = df_list[1].loc[0, "Month"]
+    print(month)
     date = datetime.datetime.date(datetime.datetime.now())
     today = datetime.datetime.strftime(date, "%B%d-%Y")
     PATH = main_dir / "course_start_dates.csv"
-    print(month)
     course_dates = pd.read_csv(PATH)
     start_date = course_dates.loc[course_dates["cohort_month"] == month.lower(), "start_date"]
     start_date = datetime.datetime.strptime(str(start_date.item()), "%Y-%m-%d")
@@ -185,10 +187,10 @@ def export_to_excel(df_list):
     for df in df_list:
         n_df = prep_df(df)
         prepped_df.append(n_df)
-
+    export_dir = main_dir / "export"
+    export_file = export_dir / f"{month}_status_update_{date}.xlsx"
     # creates writer for pd and xlswriter
-    writer = pd.ExcelWriter(
-        f"export/{month}_status_update_{date}.xlsx",
+    writer = pd.ExcelWriter(export_file,
         engine="xlsxwriter",
         date_format="mm/dd/yy",
     )
