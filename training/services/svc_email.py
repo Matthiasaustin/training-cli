@@ -24,6 +24,9 @@ class Message:
         self.attachment = None
         self.template = ""
         self.outputText = "None has been specified. Please run a constructor"
+        self.signature = """<p>Matthias Austin <br>Training Coordinator</p>
+    <p>DS Training Team <br>Volunteers of America Western Washington | voaww.org<br> maustin@voaww.org | training@voaww.org</p>
+    <p style="font-size: .5em;">This e-mail is meant for only the intended recipient, and may be a communication privileged by law. If you received this e-mail in error, any review, use, dissemination, distribution, or copying of this e-mail is strictly prohibited - please notify us immediately of the error and please delete this message from your system. Thank you.</p>"""
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
 
@@ -44,7 +47,7 @@ class Message:
         name = self.name
         link = self.link
         close_date = self.close_date
-        self.outputText = template.render(
+        self.outputText = template.render( signature=self.signature,
             name=name, link=link, close_date=close_date  # Include args for render
         )
 
@@ -56,7 +59,9 @@ class Message:
         date = date.strftime("%m/%d/%Y")
 
         self.subject = f"CPR/First Aid Reminder - {date}"
-        self.status = str(self.recipient["Status"])
+        self.status = str(self.recipient["status"])
+        self.opening_date = str(self.recipient["opening_date"])
+        self.due_date = str(self.recipeient["progress_due"])
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         template = templateEnv.get_template(self.template_file)
@@ -64,9 +69,34 @@ class Message:
         link = self.link
         status = self.status
         close_date = self.close_date
-        self.outputText = template.render(
-            name=name, link=link, close_date=close_date, status=self.status
+        self.outputText = template.render( signature=self.signature,
+            name=name, opening_date=self.opening_date, close_date=close_date, status=self.status
         )  # Include args for render
+
+    def cpr_upcoming(self):
+        self.cpr_start_email()
+        self.template_file = "cpr_upcoming_email.html"
+
+        date = datetime.now()
+        date = date.strftime("%m/%d/%Y")
+
+        self.subject = f"CPR/First Aid Renewal Upcoming - {date}"
+        self.status = str(self.recipient["status"])
+        self.opening_date = str(self.recipient["opening_date"])
+        self.due_date = str(self.recipient["progress_due"])
+        templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
+        templateEnv = jinja2.Environment(loader=templateLoader)
+        template = templateEnv.get_template(self.template_file)
+        name = self.name
+        link = self.link
+        status = self.status
+        close_date = self.close_date
+        self.outputText = template.render( signature=self.signature,
+                                           name=name,
+                                           due_date=self.due_date,
+                                           opening_date=self.opening_date,
+                                           close_date=close_date,
+                                           status=self.status)  # Include args for render
 
     def fhr_start_email(self):
         self.email = str(self.recipient["email"])
@@ -87,7 +117,7 @@ class Message:
         month = self.month
         username = self.username
         password = self.password
-        self.outputText = self.template.render(
+        self.outputText = self.template.render( signature=self.signature,
             name=name,  # Include args for render
             month=month,
             username=username,
@@ -145,7 +175,7 @@ class Message:
         update_info = re.sub("th>\d<\/th|th>\d\d<\/th", "th>Status<\/th", update_info)
         update_info = re.sub("th><\/th", "th>Chapter<\/th", update_info)
         self.template = templateEnv.get_template(self.template_file)
-        self.outputText = self.template.render(
+        self.outputText = self.template.render( signature=self.signature,
             name=name,  # Include args for render
             month=month,
             # days_left=days_left,
@@ -171,7 +201,7 @@ class Message:
         month = self.month
         username = self.username
         password = self.password
-        self.outputText = self.template.render(
+        self.outputText = self.template.render( signature=self.signature,
             name=name,  # Include args for render
             month=month,
             username=username,
@@ -190,7 +220,7 @@ class Message:
         self.template = templateEnv.get_template(self.template_file)
         name = self.name
         month = self.month
-        self.outputText = self.template.render(
+        self.outputText = self.template.render( signature=self.signature,
             name=name,  # Include args for render
             month=month,
         )
@@ -214,6 +244,8 @@ def make_email(recipient, message_type):
         message.cpr_start_email()
     elif message_type == "cprR":
         message.cpr_reminder()
+    elif message_type == "cprU":
+        message.cpr_upcoming()
     elif message_type == "start40":
         message.fhr_start_email()
     elif message_type == "reminder40":
@@ -257,6 +289,7 @@ def start(csv_name=None, message_type=None):
     Which would message?
     * cpr
     * cprR
+    * cprU
     * start40 (40hr Welcome message)
     * reminder40 (40hr Reminder message)
     * peer (Peer Coaching)

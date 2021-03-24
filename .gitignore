@@ -6,3 +6,5 @@
 *.log
 *.pdf
 /email_data/send_info/*.csv
+/data/*.csv
+*.docx

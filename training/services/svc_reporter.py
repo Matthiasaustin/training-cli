@@ -56,12 +56,15 @@ def main_program(get_csv=None, export_combined=None):
     records = []
     while rerun:
         # assign archive folder
-        archive = main_dir / f"data/Data{date}"
+        archive = data_dir / f"Data{date}"
         download_dir = Path.home() / "Downloads"
+        print (download_dir)
 
         download_files = download_dir.glob("completion-*")
+        print(download_files)
         months = []
         for f in download_files:
+            f = str(f)
             months.append(data.get_month(f))
             months = list(set(months))
         for month in months:
@@ -70,9 +73,8 @@ def main_program(get_csv=None, export_combined=None):
             data.export_to_excel(record)
             sola, voa = record
             records.append(voa)
-            data_files = data_dir.glob("*.csv")
-            for f in data_files:
-                shutil.move(f, archive)
+            for f in data_files.glob("*.csv"):
+                f.rename(archive / f.name)
         rerun = input("Rerun? yes or no\n").lower()
         if rerun.lower() == "yes" or rerun.lower() == "y":
             print(rerun)

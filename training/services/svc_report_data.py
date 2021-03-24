@@ -45,7 +45,7 @@ def get_csv():
     for k, v in course_ids.items():
         course_id = str(v)
         csv_url = f"https://dstrainings.com/report/completion/index.php?course={course_id}&format=csv"
-        # webbrowser.open(csv_url, autoraise=False)
+        webbrowser.open(csv_url, autoraise=False)
 
 
 # https://dstrainings.com/report/completion/index.php?course={course_id}&format=csv
@@ -54,22 +54,16 @@ def get_csv():
 def import_path(month, data_dir, download_dir):
 
     print(download_dir)
-    downloads = os.path.join(download_dir, f"completion-{month}*")
-    print(downloads)
-    files = glob.glob(downloads)
-    print(files)
+    files = download_dir.glob(f"completion-{month}*")
+    fx = []
     for f in files:
-        shutil.move(f, data_dir)
-
-    PATH = data_dir
-    # what type of files are read in
-    EXT = "*.csv"
-
-    # joins the path to folder to the extension
-    joined = os.path.join(PATH, EXT)
+        fx.append(f)
+        f.rename(data_dir / f.name)
 
     # creates a list of specific locations to read from the path and extension
-    path_list = glob.glob(joined)
+    path_list = []
+    for f in data_dir.glob("*.csv"):
+        path_list.append(f)
 
     # Sorts the list for easier handling later
     path_list.sort()
@@ -79,7 +73,7 @@ def import_path(month, data_dir, download_dir):
 
 def get_month(file_path):
     file = file_path
-    month = re.search(r"-(.*?)_c", file)
+    month = re.search(r"-(.*?)_c", str(file))
     month = month.group()
     month = month.replace("-", "")
     month = month.replace("_c", "")
@@ -113,8 +107,10 @@ def import_csvs(path_list):
     imported_csv = []
     chapters_imported = []
     for file in path_list:
+        print(file)
+        print(str(file.name),"*")
         # reviews the path and pulls out the chapter numbers
-        chapter_number = re.search("chapter_\d\d", file)
+        chapter_number = re.search("chapter_\d\d", str(file))
         chapter_number = chapter_number.group()
 
         # reads the csv file in as a dataframe, fills any missing values with incomplete
@@ -160,7 +156,7 @@ def export_as_csv(df, export_dir, style="institutions"):
         try:
             month = df_list.loc[0, "Month"]
             filename = f"{month.lower()}_combinded_update_{dt}.csv"
-            export = os.path.join(export_dir, filename)
+            export = export_dir / filename
             df.to_csv(export, index=False)
         except Exception:
             raise Exception("Export combined CSV Failed.")
@@ -173,10 +169,10 @@ def export_to_excel(df_list):
     month = df_list[1].loc[0, "Month"]
     date = datetime.datetime.date(datetime.datetime.now())
     today = datetime.datetime.strftime(date, "%B%d-%Y")
-    PATH = "course_start_dates.csv"
-
+    PATH = main_dir / "course_start_dates.csv"
+    print(month)
     course_dates = pd.read_csv(PATH)
-    start_date = course_dates.loc[course_dates["cohort_month"] == month, "start_date"]
+    start_date = course_dates.loc[course_dates["cohort_month"] == month.lower(), "start_date"]
     start_date = datetime.datetime.strptime(str(start_date.item()), "%Y-%m-%d")
     start_date = datetime.datetime.date(start_date)
 
