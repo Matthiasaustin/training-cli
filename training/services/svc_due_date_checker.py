@@ -4,6 +4,7 @@
 
 import pandas as pd
 from datetime import datetime
+from pathlib import Path
 
 
 date = datetime.now().date()
@@ -11,10 +12,14 @@ date = datetime.now().date()
 
 def get_due_date_list(report_type=None):
     r_type = report_type or "CPR"
-    trainings = pd.read_csv("training_list_all_20210316.csv")
+    downloads_dir = Path.home() / "Downloads"
+    csv_file = downloads_dir / Path(input("Place your training list csv file in the \'Downloads\' folder and then type in its name here (i.e. csv_file.csv)\File name: "))
+
+    trainings = pd.read_csv(csv_file)
     trainings.fillna(int(0), inplace=True)
 
-    staff = pd.read_csv("current_staff_list.csv")
+    staff_list = downloads_dir / Path(input("Place your staff list in the \'Downloads\' folder and type its full name.\n File Name: "))
+    staff = pd.read_csv(staff_list)
     list = staff[staff["Employee Status"] == "Terminated"].index
     staff.drop(list, inplace=True)
     staff.fillna(0, inplace=True)
@@ -43,8 +48,10 @@ def get_due_date_list(report_type=None):
     for r in report.iterrows():
         index = r[0]
         if r_type.casefold() == 'CPR'.casefold():
-            if "Provisional" in r[1]["Course Name"]:
+            if "Provisional".casefold() in r[1]["Course Name"].casefold():
                 report.loc[index, "Due Date"] = r[1]["Date Taken"] + pd.DateOffset(months=12)
+            elif "Extension".casefold() in r[1]["Course Name"].casefold():
+                report.loc[index, "Due Date"] = r[1]["Date Taken"] + pd.DateOffset(months=4)
             else:
                 report.loc[index, "Due Date"] = r[1]["Date Taken"] + pd.DateOffset(months=24)
         if r_type.casefold() == 'BBP'.casefold() or r_type.casefold() == 'Mandated'.casefold():

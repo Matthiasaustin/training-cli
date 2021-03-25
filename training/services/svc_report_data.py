@@ -2,11 +2,10 @@
 Imports and exports raw, unformatted data, handles paths
 """
 import pandas as pd
-import os, glob, sys, re
+import re
 import datetime
 import webbrowser
 
-import shutil
 from training.services.svc_export_format import prep_df, formats
 import config
 
@@ -25,11 +24,11 @@ def grade_courses():
         webbrowser.open(url, autoraise=False)
 
 
-def make_date(one_date):
-    # one_date = str(one_date)
-    # one_date = datetime.datetime.strptime(one_date,'%Y-%m-%d')
-    new_date = datetime.datetime.date(one_date)
-    return new_date
+# def make_date(one_date):
+#     # one_date = str(one_date)
+#     # one_date = datetime.datetime.strptime(one_date,'%Y-%m-%d')
+#     new_date = datetime.datetime.date(one_date)
+#     return new_date
 
 
 # import app.format as format
@@ -46,9 +45,6 @@ def get_csv():
         course_id = str(v)
         csv_url = f"https://dstrainings.com/report/completion/index.php?course={course_id}&format=csv"
         webbrowser.open(csv_url, autoraise=False)
-
-
-# https://dstrainings.com/report/completion/index.php?course={course_id}&format=csv
 
 
 def import_path(month, data_dir, download_dir):
@@ -73,7 +69,6 @@ def import_path(month, data_dir, download_dir):
 
 def get_month(file_path):
     file = file_path
-    print("Beginning:",file)
     pattern = re.compile(r'.*(completion)-(\w*)_(chapter).*')
     month = pattern.sub(r'\2',str(file))
     # month = re.search(r"-(\w*?)_chapter", str(file))
@@ -81,7 +76,6 @@ def get_month(file_path):
     # month = month.replace("-", "")
     # month = month.replace("_chapter", "")
     month.strip()
-    print("End:", month)
     return month
 
 
