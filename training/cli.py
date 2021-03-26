@@ -1,11 +1,14 @@
 import os
 import logging
 import click
+import config
+
+main_dir = config.main_path()
 
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter("%(asctime)s:%(name)s:%(message)s")
 
-file_handler = logging.FileHandler("training_cli.log")
+file_handler = logging.FileHandler(main_dir / "training_cli.log")
 stream_handler = logging.StreamHandler()
 
 file_handler.setFormatter(formatter)

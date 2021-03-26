@@ -10,6 +10,7 @@ training.egg-info/requires.txt
 training.egg-info/top_level.txt
 training/services/__init__.py
 training/services/svc_checker.py
+training/services/svc_due_date_checker.py
 training/services/svc_email.py
 training/services/svc_export_format.py
 training/services/svc_report_data.py
