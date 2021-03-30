@@ -1,6 +1,6 @@
 import pandas as pd
 import jinja2
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 import os
 import glob
 import re
@@ -15,6 +15,7 @@ except:
 
 main_dir = config.main_path()
 templates_dir = main_dir / "email_data/templates"
+attachments_dir = main_dir / "email_data/attachments"
 
 class Message:
     def __init__(self, df_row):
@@ -101,9 +102,8 @@ class Message:
     def fhr_start_email(self):
         self.email = str(self.recipient["email"])
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
-        self.attachment = PATH = os.path.abspath(
-            "../email_data/attachments/mar_2021_syllabus.pdf"
-        )
+        self.attachment = str(PureWindowsPath(attachments_dir / "mar_2021_syllabus.pdf"))
+        print(self.attachment)
         self.template_file = "welcome_40hr.html"
         self.name = str(self.recipient["firstname"])
         self.month = "March"
