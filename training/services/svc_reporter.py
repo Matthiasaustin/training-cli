@@ -2,8 +2,6 @@
 Main program of the training reporter suite. The program onces complete will serve as the hub and "ui" through cli for various programs/modules for compiling reports and emailing staff/students
 """
 import pandas as pd
-import os
-import sys
 import glob
 import shutil
 from pathlib import Path
@@ -88,9 +86,7 @@ def run_single_report(export_combined=None):
     data_dir = main_dir / "data"
     date = datetime.now().strftime("%Y%m%d")
     download_dir = Path.home() / "Downloads"
-    downloads = download_dir.glob("completion-*")
-    files = glob.glob(downloads)
-    months = []
+    # downloads = download_dir.glob("completion-*")
     month = input("Month?\n").lower()
     csv = data.import_data(month, data_dir, download_dir)
     records = report_maker.parse_data(csv, export_combined)

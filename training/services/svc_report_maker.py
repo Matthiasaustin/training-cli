@@ -1,8 +1,5 @@
 import pandas as pd
-import cProfile
-import numpy as np
 import training.services.svc_report_data as data
-from datetime import datetime
 import config
 
 # hour_checker
