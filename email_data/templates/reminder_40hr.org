@@ -1,18 +1,18 @@
 Hello {{name}},
 
-This is your regular update regarding your progress through your assigned courses.
+# This is your regular update regarding your progress through your assigned courses.
+This is the first of your regular updates on your progress through the 40hr Online.
+
+The second set of trainings opened up today. Chapter 1-8, 11, 13 and 14 are open.
+
+*Chapters 1-3 are due today*.
+
+Your target end date for completing all chapters is May 28th, though some extra time can be given upon request.
 
 Progress to date:
-
+{{update_info}}
 # Insert Progress info here
-
-Please note you have {days_left} days left to complete your trainings.
 
 Let me know if you have any questions,
 
-Matthias Austin
-
-Training Coordinator
-DS Training Team
-Volunteers of America Western Washington | voaww.org
-contact me: maustin@voaww.org | training@voaww.org
+{{signature}}

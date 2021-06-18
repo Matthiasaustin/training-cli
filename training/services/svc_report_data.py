@@ -14,7 +14,7 @@ main_dir = config.main_path()
 
 
 def grade_courses():
-    course_id = main_dir / "report_info/course_id.csv"
+    course_id = main_dir / "course_id.csv"
     course_id_df = pd.read_csv(course_id)
     course_ids = course_id_df.loc[:, "id"]
 

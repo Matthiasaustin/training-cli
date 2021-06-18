@@ -1,17 +1,10 @@
 <body>
-    <p>Hello {{name}},</p>
-    <p>This is an update regarding your progress for your assigned courses.</p>
-    <p>Your target end date for completing these courses is March 24th, though some extra time can be given upon request.</p>
-    <h4>Progress to date:</h4>
-    <section>
-        <!-- use df_series.to_frame().to_html() -->
-        <!-- Insert status information here -->
-        {{update_info}}
-    </section>
-    <!-- <p>Please note you have {{days_left}} days left to complete your trainings.</p> -->
-    <p>Let me know if you have any questions,</p>
-    <p>Matthias Austin</p>
-    <p>Training Coordinator<br>DS Training Team<br>Volunteers of America Western Washington | voaww.org<br>Contact Me: maustin@voaww.org | training@voaww.org</p>
+<p>Hello {{name}},</p>
+<p>This is an update on your progress, as well a reminder that some chapters are scheduled to be complete today. The last set of chapters (9,10,12) are open now as well!</p>
+<!-- <p>All chapters are now open, including the last set with became available today</p> -->
+<p>As a reminder: <strong>Chapters 1-7, 13 and 14 are scheduled as due today</strong>. Chapters 8 and 11 will be due on Friday.</p>
+<p>Your target end date for completing all chapters is June 28th, though some extra time can be given upon request.</p>
+<p>Progress to date: {{update_info}}</p>
+<p>Let me know if you have any questions,</p>
+{{signature}}
 </body>
-
-</html>

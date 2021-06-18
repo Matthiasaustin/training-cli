@@ -16,6 +16,7 @@ except:
 main_dir = config.main_path()
 templates_dir = main_dir / "email_data/templates"
 attachments_dir = main_dir / "email_data/attachments"
+send_info_dir = main_dir / "email_data/send_info"
 
 class Message:
     def __init__(self, df_row):
@@ -54,7 +55,7 @@ class Message:
 
     def cpr_reminder(self):
         self.cpr_start_email()
-        self.template_file = "cpr_reminder_email.html"
+        self.template_file = "cpr_reminder.html"
 
         date = datetime.now()
         date = date.strftime("%m/%d/%Y")
@@ -62,7 +63,7 @@ class Message:
         self.subject = f"CPR/First Aid Reminder - {date}"
         self.status = str(self.recipient["status"])
         self.opening_date = str(self.recipient["opening_date"])
-        self.due_date = str(self.recipeient["progress_due"])
+        self.due_date = str(self.recipient["progress_due"])
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         template = templateEnv.get_template(self.template_file)
@@ -71,7 +72,7 @@ class Message:
         status = self.status
         close_date = self.close_date
         self.outputText = template.render( signature=self.signature,
-            name=name, opening_date=self.opening_date, close_date=close_date, status=self.status
+                                           name=name,link=link, opening_date=self.opening_date, close_date=close_date, status=self.status
         )  # Include args for render
 
     def cpr_upcoming(self):
@@ -102,12 +103,15 @@ class Message:
     def fhr_start_email(self):
         self.email = str(self.recipient["email"])
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
-        self.attachment = str(PureWindowsPath(attachments_dir / "mar_2021_syllabus.pdf"))
+        # self.attachment = str(PureWindowsPath(attachments_dir / "june_2021_syllabus.pdf"))
+        # self.attachment = str(PureWindowsPath(attachments_dir / "may_ttt_2021_syllabus.pdf"))
         print(self.attachment)
         self.template_file = "welcome_40hr.html"
+        # self.template_file = "ttt_wrap.html"
         self.name = str(self.recipient["firstname"])
-        self.month = "March"
-        self.subject = f"Welcome to the {self.month} 40hr Core"
+        self.month = "June"
+        self.subject = f"Welcome to the {self.month} Virtual 40hr Core"
+        # self.subject = f"May Virtual TTT Wrap-up"
         self.username = str(self.recipient["username"])
         self.password = str(self.recipient["password"])
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
@@ -125,9 +129,11 @@ class Message:
         )
 
     def fhr_reminder_email(self):
-        update_path = os.path.abspath(
-            "../email_data/send_info/march_combined_update.csv"
-        )
+        # update_path = os.path.abspath(
+        #     "../email_data/send_info/april_combined.csv"
+        # )
+        # update_path = PureWindowsPath(send_info_dir / 'may_combined.csv')
+        update_path = PureWindowsPath(send_info_dir / 'june_combined.csv')
         update_df = pd.read_csv(update_path)
         update_info = update_df.loc[
             update_df["Email address"] == self.recipient["email"]
@@ -137,6 +143,7 @@ class Message:
         date = date.strftime("%m/%d/%Y")
         self.subject = f"Training Reminder/Update - {date}"
         self.template_file = "reminder_40hr.html"
+        self.attachment = None
         # update_info = update_info.to_html()
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
@@ -215,7 +222,8 @@ class Message:
         self.name = str(self.recipient["firstname"])
         self.month = "March"
         self.subject = f"Reminder: March Virtual Peer Coaching Class"
-        templateLoader = jinja2.FileSystemLoader(searchpath="../email_data/templates")
+        PATH = PureWindowsPath(main_dir / 'email_data/templates')
+        templateLoader = jinja2.FileSystemLoader(searchpath=PATH)
         templateEnv = jinja2.Environment(loader=templateLoader)
         self.template = templateEnv.get_template(self.template_file)
         name = self.name
@@ -256,7 +264,7 @@ def make_email(recipient, message_type):
         message.peer_coaching_reminder()
 
     mail.To = message.email
-    mail.CC = message.supervisor_email
+    # mail.CC = message.supervisor_email
     text = message.get_body()
 
     mail.Subject = message.subject
