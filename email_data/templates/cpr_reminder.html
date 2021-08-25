@@ -1,7 +1,14 @@
+<html>
+
 <body>
-<p>Hello {{name}},</p>
-<p>I am reaching out because it appears you are <strong>{{status}}</strong> in the CPR/First Aid class which is scheduled to close {{close_date}}. If you have not registered yet your link is: <a href="{{link}}">{{link}}</a></p>
-<p>If you have already registered with that link you can log in and complete the course at <a href="www.redcrosslearningcenter.org">www.redcrosslearningcenter.org</a> .</p>
-<p>Please complete this as soon as possible. I've cc'd your supervisor to keep them aware of your progress.</p>
-{{signature}}
+    <p>Hello {{name}},</p>
+    <p>According to the course status you are listed as <strong>{{status}}</strong> in your CPR/First Aid class at <a href="www.redcrosslearningcenter.org">www.redcrosslearningcenter.org</a>. The class closing date is <strong>{{close_date}}</strong>.</p>
+    <p>Since you are Not Registered, you will need us to use the link below to register and then log in to complete the course. If you have another current CPR/First Aid certificate you can also provide that instead.</p>
+        <p>Your link is: <a href="{{link}}">{{link}}</a></p>
+    <p>Since you're in progress please make sure you complete the rest of your course before the closing date or as soon as possible!</p>
+    <p>Since you are complete, there is nothing else you need to do until we begin scheduling in person skill session later this year.</p>
+    <p>Please reach out with any questions,</p>
+    <p>{{signature}}</p>
 </body>
+
+</html>

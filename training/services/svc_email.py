@@ -42,7 +42,8 @@ class Message:
         self.template_file = "cpr_email.html"
         date = datetime.now()
         date = date.strftime("%m/%d/%Y")
-        self.subject = f"CPR/First Aid Required - {date}"
+        self.subject = str(self.recipient['subject'])
+        # self.subject = f"CPR/First Aid Required - {date}"
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         template = templateEnv.get_template(self.template_file)
@@ -62,7 +63,8 @@ class Message:
 
         self.subject = f"CPR/First Aid Reminder - {date}"
         self.status = str(self.recipient["status"])
-        self.opening_date = str(self.recipient["opening_date"])
+        # self.opening_date = str(self.recipient["opening_date"])
+        self.close_date = str(self.recipient["closing_date"])
         self.due_date = str(self.recipient["progress_due"])
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
@@ -72,7 +74,7 @@ class Message:
         status = self.status
         close_date = self.close_date
         self.outputText = template.render( signature=self.signature,
-                                           name=name,link=link, opening_date=self.opening_date, close_date=close_date, status=self.status
+                                           name=name,link=link, close_date=close_date, status=self.status
         )  # Include args for render
 
     def cpr_upcoming(self):
@@ -103,13 +105,13 @@ class Message:
     def fhr_start_email(self):
         self.email = str(self.recipient["email"])
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
-        # self.attachment = str(PureWindowsPath(attachments_dir / "june_2021_syllabus.pdf"))
+        self.attachment = str(PureWindowsPath(attachments_dir / "august_2021_syllabus.pdf"))
         # self.attachment = str(PureWindowsPath(attachments_dir / "may_ttt_2021_syllabus.pdf"))
         print(self.attachment)
         self.template_file = "welcome_40hr.html"
         # self.template_file = "ttt_wrap.html"
         self.name = str(self.recipient["firstname"])
-        self.month = "June"
+        self.month = "August"
         self.subject = f"Welcome to the {self.month} Virtual 40hr Core"
         # self.subject = f"May Virtual TTT Wrap-up"
         self.username = str(self.recipient["username"])
@@ -132,8 +134,8 @@ class Message:
         # update_path = os.path.abspath(
         #     "../email_data/send_info/april_combined.csv"
         # )
-        # update_path = PureWindowsPath(send_info_dir / 'may_combined.csv')
-        update_path = PureWindowsPath(send_info_dir / 'june_combined.csv')
+        # update_path = PureWindowsPath(send_info_dir / 'july_combined.csv')
+        update_path = PureWindowsPath(send_info_dir / 'august_combined.csv')
         update_df = pd.read_csv(update_path)
         update_info = update_df.loc[
             update_df["Email address"] == self.recipient["email"]
@@ -264,7 +266,7 @@ def make_email(recipient, message_type):
         message.peer_coaching_reminder()
 
     mail.To = message.email
-    # mail.CC = message.supervisor_email
+    mail.CC = message.supervisor_email
     text = message.get_body()
 
     mail.Subject = message.subject

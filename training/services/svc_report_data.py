@@ -170,7 +170,13 @@ def export_to_excel(df_list):
     PATH = main_dir / "course_start_dates.csv"
     course_dates = pd.read_csv(PATH)
     start_date = course_dates.loc[course_dates["cohort_month"] == month.lower(), "start_date"]
-    start_date = datetime.datetime.strptime(str(start_date.item()), "%Y-%m-%d")
+    print (start_date)
+    try:
+        start_date = datetime.datetime.strptime(str(start_date.item()), "%Y-%m-%d")
+    except:
+        start_date = datetime.datetime.strptime(str("2021-08-04"), "%Y-%m-%d")
+        # TODO Figure out why august date range not working from id file.
+        print("!!!Exception, using manual date!!!")
     start_date = datetime.datetime.date(start_date)
 
     release_2 = start_date + datetime.timedelta(days=7)
@@ -191,7 +197,8 @@ def export_to_excel(df_list):
     )
     month_t = month.title()
     sola_sheet = f"SOLA Update {date}"
-    voa_sheet = f"VOA {month_t} Update {date}"
+    voa_sheet = f"VOA {month_t}-{date}"
+    # voa_sheet = f"VOA {month_t} Update {date}"
     try:
         first_institution = prepped_df[0].loc[0, "Institution"]
     except:
