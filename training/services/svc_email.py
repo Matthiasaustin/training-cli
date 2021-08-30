@@ -105,13 +105,13 @@ class Message:
     def fhr_start_email(self):
         self.email = str(self.recipient["email"])
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
-        self.attachment = str(PureWindowsPath(attachments_dir / "august_2021_syllabus.pdf"))
+        self.attachment = str(PureWindowsPath(attachments_dir / "september_2021_syllabus.pdf"))
         # self.attachment = str(PureWindowsPath(attachments_dir / "may_ttt_2021_syllabus.pdf"))
         print(self.attachment)
         self.template_file = "welcome_40hr.html"
         # self.template_file = "ttt_wrap.html"
         self.name = str(self.recipient["firstname"])
-        self.month = "August"
+        self.month = "September"
         self.subject = f"Welcome to the {self.month} Virtual 40hr Core"
         # self.subject = f"May Virtual TTT Wrap-up"
         self.username = str(self.recipient["username"])
