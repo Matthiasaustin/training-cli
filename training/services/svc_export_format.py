@@ -38,7 +38,7 @@ class formats:
         self.not_enrolled = workbook.add_format(
             {"bg_color": "#F2F4F4", "font_color": "#F2F4F2", "pattern": 1}
         )
-        self.location = "A5:BF100"
+        self.location = "A5:AC50"
 
     def con_closed1(self):
         return {
@@ -79,7 +79,7 @@ class formats:
 
         self.started_format = workbook.add_format({"bg_color": "#F9E79F"})
         self.incomplete_format = workbook.add_format({"bg_color": "#EDBB99"})
-        self.location = "A5:BF100"
+        self.location = "A5:AC50"
 
     def con_complete(self):
         return {
@@ -156,8 +156,9 @@ def prep_df(df):
             "Chapter 10",
             "Chapter 12",
             "Due Date #5",
-            "Chapter 12 Skills Lab",
+            # "Chapter 12 Skills Lab",
             "Total Hours Completed",
+            "Hours Completed Since Last Check",
             "Total Hours Outstanding",
         ]
     )

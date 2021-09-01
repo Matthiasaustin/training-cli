@@ -5,6 +5,7 @@ import pandas as pd
 import re
 import datetime
 import webbrowser
+from pathlib import Path, PureWindowsPath
 
 from training.services.svc_export_format import prep_df, formats
 import config
@@ -23,6 +24,26 @@ def grade_courses():
         url = f"https://dstrainings.com/report/completion/index.php?course={course_id}"
         webbrowser.open(url, autoraise=False)
 
+def log_check():
+    # create csv file to log completions, pass if it exists
+    file = main_dir / "course_check_log.csv"
+    if file.exists():
+        print("Logging current check")
+        log = pd.read_csv(file)
+
+        # get most recent check date
+        last_check = log.tail(1)
+        last_check = 
+        # add todays date as last check
+        current_check = pd.DataFrame([[str(datetime.datetime.now())]], columns=['check_log'])
+        log = log.append(current_check, ignore_index=True)
+        log.to_csv(file, index=False)
+    else:
+        print("No file to log in")
+        log = pd.DataFrame([[datetime.datetime.now()]], columns=["check_log", ])
+        log.to_csv(file, index=False)
+
+    # return last_check
 
 # def make_date(one_date):
 #     # one_date = str(one_date)
@@ -152,12 +173,11 @@ def export_as_csv(df, export_dir, style="institutions"):
         print("Printing Combined CSV")
         try:
             month = df_list.loc[0, "Month"]
-            filename = f"{month.lower()}_combinded_update_{dt}.csv"
+            filename = f"{month.lower()}_combined_update_{dt}.csv"
             export = export_dir / filename
             df.to_csv(export, index=False)
         except Exception:
             raise Exception("Export combined CSV Failed.")
-
 
 def export_to_excel(df_list):
     df_list = df_list
@@ -188,6 +208,9 @@ def export_to_excel(df_list):
     for df in df_list:
         n_df = prep_df(df)
         prepped_df.append(n_df)
+
+    # TODO add hours check here
+
     export_dir = main_dir / "export"
     export_file = export_dir / f"{month}_status_update_{date}.xlsx"
     # creates writer for pd and xlswriter
@@ -340,4 +363,5 @@ def export_to_excel(df_list):
 # db import/export tbd
 if __name__ == "__main__":
 
-    grade_courses()
+    # grade_courses()
+    log_check()
