@@ -37,6 +37,7 @@ def main_program(get_csv=None, export_combined=None):
         pass
 
     data_dir = main_dir / "data"
+    download_dir = Path.home() / "Downloads"
     date = datetime.now().strftime("%Y%m%d")
     current_month = datetime.now().date().strftime("%B").lower()
 
@@ -59,6 +60,7 @@ def main_program(get_csv=None, export_combined=None):
 
         download_files = download_dir.glob("completion-*")
         months = []
+        master = pd.DataFrame()
         for f in download_files:
             f = str(f)
             months.append(data.get_month(f))
@@ -66,6 +68,7 @@ def main_program(get_csv=None, export_combined=None):
         for month in months:
             csv = data.import_data(month, data_dir, download_dir)
             record = report_maker.parse_data(csv, export_combined)
+            master.append(record)
             data.export_to_excel(record)
             sola, voa = record
             records.append(voa)
@@ -76,10 +79,23 @@ def main_program(get_csv=None, export_combined=None):
             rerun = True
         else:
             rerun = False
-    try:
-        result = pd.concat(records, axis=0)
-    except ValueError:
-        print("Nothing to combine.")
+
+        # Combine and format the collected VOA records in one df
+        c_rec = pd.concat(records)
+        export_dir = main_dir / "export"
+        c_rec = data.prep_df(c_rec)
+        c_rec.to_csv(export_dir / "master.csv")
+        # print(c_rec)
+        # # print(records[0])
+        # # print("\n*** Records List Start ***\n",records,"\n*** Records End ***\n")
+        # for i in records[1:-1]:
+        #     # print(i,"#########\n")
+        #     c_rec.append(i)
+        print(c_rec)
+
+    #added to reset csv data files during testing.
+    for f in archive.glob("*.csv"):
+        f.rename(download_dir / f.name)
 
 
 def run_single_report(export_combined=None):

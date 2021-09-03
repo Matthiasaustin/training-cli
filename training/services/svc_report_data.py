@@ -32,10 +32,11 @@ def log_check():
         log = pd.read_csv(file)
 
         # get most recent check date
-        last_check = log.tail(1)
-        last_check = 
+        # last_check = log.tail(1)
+        last_check = log['check_log'].iloc[-1]
+        last_check = datetime.datetime.strptime(last_check, "%Y-%m-%d %H:%M:%S")
         # add todays date as last check
-        current_check = pd.DataFrame([[str(datetime.datetime.now())]], columns=['check_log'])
+        current_check = pd.DataFrame([[str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))]], columns=['check_log'])
         log = log.append(current_check, ignore_index=True)
         log.to_csv(file, index=False)
     else:
@@ -43,7 +44,7 @@ def log_check():
         log = pd.DataFrame([[datetime.datetime.now()]], columns=["check_log", ])
         log.to_csv(file, index=False)
 
-    # return last_check
+    return last_check
 
 # def make_date(one_date):
 #     # one_date = str(one_date)
