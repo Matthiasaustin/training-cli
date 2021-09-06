@@ -31,42 +31,64 @@ def award_hours (chapter_number):
     }.get(chapter_number)
 
 
-def check_completion (prepped_df, last_checked):
+def check_completion (prepped_df):
     """takes a df of student progress and checks completion and total hours finished."""
     df = prepped_df
-    last_checked = data.log_check()
+    last_checked = data.log_check().strftime("%Y-%m-%d")
+    print("last check: ", last_checked)
+    chapters = [
+        "Chapter 1",
+        "Chapter 2",
+        "Chapter 3",
+        "Chapter 4",
+        "Chapter 5",
+        "Chapter 6",
+        "Chapter 7",
+        "Chapter 8",
+        "Chapter 9",
+        "Chapter 10",
+        "Chapter 11",
+        "Chapter 12",
+        "Chapter 13",
+        "Chapter 14",
+    ]
+    print(len(df))
+    # tests = [df.iloc[1]['Chapter 1'],
+    #          df.iloc[2]['Chapter 1'],
+    #          df.iloc[44]['Chapter 1'],
+    #          df.iloc[45]['Chapter 1'],
+    #          "Started(44%)",
+    #          ]
+    # for r in range(0,len(df)):
 
 
-    # for each row in file
+    for r in range(0,15):
+        for c in chapters:
+            try:
+                test = datetime.datetime.strptime(df.iloc[r][c], "%Y-%m-%d").strftime("%Y-%m-%d")
+                is_date= True
+                print(test, last_checked)
+                if test > last_checked:
+                    print("newer than check")
+                if test < last_checked:
+                    print("older than last check")
+                print('pass', test)
+            except:
+                is_date = False
+                print("fail", test)
+            print(is_date)
 
-    # for each chapter listed
-    # capture completion date, hours it is worth
 
-    # if completion date is after last check, put in awarded col
-    # if completion date is since last check, add to total col
 
-    # columns=[
-    #         "Chapter 1",
-    #         "Chapter 2",
-    #         "Chapter 3",
-    #         "Due Date #1",
-    #         "Chapter 4",
-    #         "Chapter 13",
-    #         "Chapter 14",
-    #         "Due Date #2",
-    #         "Chapter 5",
-    #         "Chapter 6",
-    #         "Chapter 7",
-    #         "Due Date #3",
-    #         "Chapter 8",
-    #         "Chapter 11",
-    #         "Due Date #4",
-    #         "Chapter 9",
-    #         "Chapter 10",
-    #         "Chapter 12",
-    #         "Due Date #5",
-    #         "Total Hours Completed",
-    #         "Total Hours Outstanding",]
+
+
+
+
+    # for n in df:
+        # Check Chapters for completion, if is date, is completed.
+        # Check hours for completion, add to set total, completed total
+        # Check date against last checked to see if hours are new, if so, add to new hours total.
+
 
 
 if __name__ == "__main__":
