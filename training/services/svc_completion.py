@@ -8,7 +8,7 @@ import training.services.svc_report_maker as report_maker
 import config
 
 main_dir = config.main_path()
-test_df = pd.read_csv(main_dir / "master.csv")
+# test_df = pd.read_csv(main_dir / "master.csv")
 
 def award_hours (chapter_number):
     """Chapter name must conform to the standard format, at which point it is matched with the correct number of hours to determine the number of hours to award."""
@@ -34,7 +34,7 @@ def award_hours (chapter_number):
 def check_completion (prepped_df):
     """takes a df of student progress and checks completion and total hours finished."""
     df = prepped_df
-    last_checked = data.log_check().strftime("%Y-%m-%d")
+    last_checked = data.log_check().strftime("%Y-%m-%d %H:%M")
     print("last check: ", last_checked)
     chapters = [
         "Chapter 1",
@@ -52,35 +52,74 @@ def check_completion (prepped_df):
         "Chapter 13",
         "Chapter 14",
     ]
-    print(len(df))
-    # tests = [df.iloc[1]['Chapter 1'],
-    #          df.iloc[2]['Chapter 1'],
-    #          df.iloc[44]['Chapter 1'],
-    #          df.iloc[45]['Chapter 1'],
-    #          "Started(44%)",
-    #          ]
+    # print(df[df.index.duplicated()])
     # for r in range(0,len(df)):
+    for r in range(0,len(df)):
+        total_hours = 0
+        hours_since_last_checked = 0
+        d_hours = [0,0,0,0,0]  # Hours finished by deadline, #1-5
+        deadlines =[[
+            "Chapter 1",
+            "Chapter 2",
+            "Chapter 3"],
+            ["Chapter 4",
+             "Chapter 13",
+             "Chapter 14"],
+            ["Chapter 5",
+             "Chapter 6",
+             "Chapter 7"],
+            ["Chapter 8",
+             "Chapter 11",],
+            ["Chapter 9",
+             "Chapter 10",
+             "Chapter 12"]]
 
 
-    for r in range(0,15):
+
         for c in chapters:
+            test = df.iloc[r][c]
             try:
-                test = datetime.datetime.strptime(df.iloc[r][c], "%Y-%m-%d").strftime("%Y-%m-%d")
+                test = str(test)
+                test = datetime.datetime.strptime(test, "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d %H:%M")
                 is_date= True
-                print(test, last_checked)
+                hours = award_hours(c)
                 if test > last_checked:
-                    print("newer than check")
-                if test < last_checked:
-                    print("older than last check")
-                print('pass', test)
+                    hours_since_last_checked += hours
+                    # print("newer than check", hours_since_last_checked)
+                # print('pass', test, last_checked)
+                # print(c,"Hours: ", hours)
+                total_hours += hours
+                # print(df.iloc[r]['Name'],total_hours)
+                if c in deadlines[0]:
+                    d_hours[0] += hours
+                elif c in deadlines[1]:
+                    d_hours[1] += hours
+                elif c in deadlines[2]:
+                    d_hours[2] += hours
+                elif c in deadlines[3]:
+                    d_hours[3] += hours
+                elif c in deadlines[4]:
+                    d_hours[4] += hours
+
+                # print(d_hours)
             except:
                 is_date = False
-                print("fail", test)
-            print(is_date)
+                print(sys.exc_info())
+                print("fail",test, last_checked)
 
 
+        df.at[r,"Total Hours Completed"] = total_hours
+        df.at[r,"Hours Completed Since Last Check"] = hours_since_last_checked
+        df.at[r,"Due Date #1"] = d_hours[0]
+        df.at[r,"Due Date #2"] = d_hours[1]
+        df.at[r,"Due Date #3"] = d_hours[2]
+        df.at[r,"Due Date #4"] = d_hours[3]
+        df.at[r,"Due Date #5"] = d_hours[4]
 
-
+    # print(df.loc[1])
+    # print(df.loc[22])
+    # print(df.loc[90])
+    return df
 
 
 

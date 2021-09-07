@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import datetime
 import training.services.svc_report_data as data
 import training.services.svc_report_maker as report_maker
+import training.services.svc_completion as completion
 import config
 
 
@@ -70,8 +71,8 @@ def main_program(get_csv=None, export_combined=None):
             record = report_maker.parse_data(csv, export_combined)
             master.append(record)
             data.export_to_excel(record)
-            sola, voa = record
-            records.append(voa)
+            sola, voa, combined_report = record
+            records.append(combined_report)
             for f in data_dir.glob("*.csv"):
                 f.rename(archive / f.name)
         rerun = input("Rerun? yes or no\n").lower()
@@ -80,10 +81,48 @@ def main_program(get_csv=None, export_combined=None):
         else:
             rerun = False
 
+        #added to reset csv data files during testing.
+        for f in archive.glob("*.csv"):
+            f.rename(download_dir / f.name)
         # Combine and format the collected VOA records in one df
         c_rec = pd.concat(records)
         export_dir = main_dir / "export"
-        c_rec = data.prep_df(c_rec)
+        # c_rec = data.prep_df(c_rec)
+        c_rec = c_rec.reset_index()
+        c_rec = c_rec.reindex(
+            columns=[
+                "Department",
+                "Name",
+                "Email address",
+                "Institution",
+                "ID number",
+                "Chapter 1",
+                "Chapter 2",
+                "Chapter 3",
+                "Due Date #1",
+                "Chapter 4",
+                "Chapter 13",
+                "Chapter 14",
+                "Due Date #2",
+                "Chapter 5",
+                "Chapter 6",
+                "Chapter 7",
+                "Due Date #3",
+                "Chapter 8",
+                "Chapter 11",
+                "Due Date #4",
+                "Chapter 9",
+                "Chapter 10",
+                "Chapter 12",
+                "Due Date #5",
+                # "Chapter 12 Skills Lab",
+                "Total Hours Completed",
+                "Hours Completed Since Last Check",
+                "Total Hours Outstanding",
+            ]
+        )
+
+        c_rec = completion.check_completion(c_rec)
         c_rec.to_csv(export_dir / "master.csv")
         # print(c_rec)
         # # print(records[0])

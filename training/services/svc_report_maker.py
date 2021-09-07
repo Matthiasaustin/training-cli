@@ -42,7 +42,6 @@ def check_started(course_dataframe, static_headers):
             course[activity] = pd.to_datetime(
                 course[activity], dayfirst=True, errors="coerce"
             )
-
             completion_dates.append(activity)  # Add activity title to list
             # new_cols.append(activity)  # Add activity to final course df list *May remove
 
@@ -161,7 +160,7 @@ def parse_data(list_of_df, export_combined=None):
             sola_report = sola_report.append(row, ignore_index=True)
         if row["Institution"] == "VOAWW":
             voa_report = voa_report.append(row, ignore_index=True)
-    course_reports = [sola_report, voa_report]
+    course_reports = [sola_report, voa_report, course_report]
     if export_combined is not None:
         export_dir = main_dir / "export"
         data.export_as_csv(course_report, export_dir, "combined")
