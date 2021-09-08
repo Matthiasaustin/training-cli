@@ -70,6 +70,9 @@ def main_program(get_csv=None, export_combined=None):
             csv = data.import_data(month, data_dir, download_dir)
             record = report_maker.parse_data(csv, export_combined)
             master.append(record)
+            print(record[0])
+            print(record[1])
+            record[0],record[1] = completion.check_completion(record[0]), completion.check_completion(record[1])
             data.export_to_excel(record)
             sola, voa, combined_report = record
             records.append(combined_report)
@@ -82,8 +85,8 @@ def main_program(get_csv=None, export_combined=None):
             rerun = False
 
         #added to reset csv data files during testing.
-        for f in archive.glob("*.csv"):
-            f.rename(download_dir / f.name)
+        # for f in archive.glob("*.csv"):
+        #     f.rename(download_dir / f.name)
         # Combine and format the collected VOA records in one df
         c_rec = pd.concat(records)
         export_dir = main_dir / "export"
@@ -133,8 +136,8 @@ def main_program(get_csv=None, export_combined=None):
         print(c_rec)
 
     #added to reset csv data files during testing.
-    for f in archive.glob("*.csv"):
-        f.rename(download_dir / f.name)
+    # for f in archive.glob("*.csv"):
+    #     f.rename(download_dir / f.name)
 
 
 def run_single_report(export_combined=None):

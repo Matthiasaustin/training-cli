@@ -33,7 +33,9 @@ def award_hours (chapter_number):
 
 def check_completion (prepped_df):
     """takes a df of student progress and checks completion and total hours finished."""
+    # df = pd.DataFrame(prepped_df)
     df = prepped_df
+    print(df)
     last_checked = data.log_check().strftime("%Y-%m-%d %H:%M")
     print("last check: ", last_checked)
     chapters = [
@@ -77,6 +79,8 @@ def check_completion (prepped_df):
 
 
         for c in chapters:
+            # print("Pre-loc",df)
+            # print(df.loc[0])
             test = df.iloc[r][c]
             try:
                 test = str(test)
@@ -104,8 +108,8 @@ def check_completion (prepped_df):
                 # print(d_hours)
             except:
                 is_date = False
-                print(sys.exc_info())
-                print("fail",test, last_checked)
+                # print(sys.exc_info())
+                # print("fail",test, last_checked)
 
 
         df.at[r,"Total Hours Completed"] = total_hours
