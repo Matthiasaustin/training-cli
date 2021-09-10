@@ -137,7 +137,7 @@ class Message:
         #     "../email_data/send_info/april_combined.csv"
         # )
         # update_path = PureWindowsPath(send_info_dir / 'july_combined.csv')
-        update_path = PureWindowsPath(send_info_dir / 'august_combined.csv')
+        update_path = PureWindowsPath(send_info_dir / 'master.csv')
         update_df = pd.read_csv(update_path)
         update_info = update_df.loc[
             update_df["Email address"] == self.recipient["email"]
@@ -146,13 +146,16 @@ class Message:
         date = datetime.now()
         date = date.strftime("%m/%d/%Y")
         self.subject = f"Training Reminder/Update - {date}"
-        self.template_file = "reminder_40hr.html"
         self.attachment = None
         # update_info = update_info.to_html()
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         name = self.name
         month = self.month
+        print(update_info)
+        hours_completed = update_info.iloc[0]["Hours Completed Since Last Check"]
+        institution = update_info.iloc[0]["Institution"]
+        print(name,institution,hours_completed)
         update_info = update_info.loc(axis=1)[
             "Chapter 1",
             "Chapter 2",
@@ -185,13 +188,19 @@ class Message:
         )
         update_info = re.sub("th>\d<\/th|th>\d\d<\/th", "th>Status<\/th", update_info)
         update_info = re.sub("th><\/th", "th>Chapter<\/th", update_info)
+        if institution == 'VOAWW':
+            self.template_file= "voaww40hr.html"
+            self.attachment = str(PureWindowsPath(attachments_dir / "SMH_Employees_RequestPunch.pdf"))
+        else:
+            self.template_file = "reminder_40hr.html"
         self.template = templateEnv.get_template(self.template_file)
         self.outputText = self.template.render( signature=self.signature,
-            name=name,  # Include args for render
-            month=month,
-            # days_left=days_left,
-            update_info=update_info,
-        )
+                                                name=name,  # Include args for render
+                                                month=month,
+                                                hours_completed=hours_completed,
+                                                # days_left=days_left,
+                                                update_info=update_info,
+                                               )
 
     def peer_coaching(self):
         self.email = str(self.recipient["email"])

@@ -345,11 +345,11 @@ def export_to_excel(df_list):
         worksheet.write(
             "Y3", f'Due Date: {duedate5.strftime("%m/%d/%Y")}', header_format
         )
-        worksheet.write("Z3", "2hr", header_format)
+        # worksheet.write("Z3", "2hr", header_format)
         format = formats(workbook, worksheet)
 
         worksheet.conditional_format("$O5:$U100", format.con_closed1())
-        worksheet.conditional_format("$V5:$Z100", format.con_closed2())
+        worksheet.conditional_format("$V5:$Y100", format.con_closed2())
         worksheet.conditional_format(format.location, format.con_blanks())
         worksheet.conditional_format(format.location, format.date())
         worksheet.conditional_format(format.location, format.con_complete())

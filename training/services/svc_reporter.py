@@ -42,6 +42,7 @@ def main_program(get_csv=None, export_combined=None):
     date = datetime.now().strftime("%Y%m%d")
     current_month = datetime.now().date().strftime("%B").lower()
 
+    last_checked = data.log_check().strftime("%Y-%m-%d %H:%M")
     # make a directory for the data from today
     archive_dir = data_dir / f"Data{date}"
     try:
@@ -72,7 +73,7 @@ def main_program(get_csv=None, export_combined=None):
             master.append(record)
             print(record[0])
             print(record[1])
-            record[0],record[1] = completion.check_completion(record[0]), completion.check_completion(record[1])
+            record[0],record[1] = completion.check_completion(record[0],last_checked), completion.check_completion(record[1],last_checked)
             data.export_to_excel(record)
             sola, voa, combined_report = record
             records.append(combined_report)
@@ -99,6 +100,7 @@ def main_program(get_csv=None, export_combined=None):
                 "Email address",
                 "Institution",
                 "ID number",
+                "Month",
                 "Chapter 1",
                 "Chapter 2",
                 "Chapter 3",
@@ -125,7 +127,7 @@ def main_program(get_csv=None, export_combined=None):
             ]
         )
 
-        c_rec = completion.check_completion(c_rec)
+        c_rec = completion.check_completion(c_rec,last_checked)
         c_rec.to_csv(export_dir / "master.csv")
         # print(c_rec)
         # # print(records[0])

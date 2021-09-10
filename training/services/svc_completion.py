@@ -31,12 +31,12 @@ def award_hours (chapter_number):
     }.get(chapter_number)
 
 
-def check_completion (prepped_df):
+def check_completion (prepped_df, last_check):
     """takes a df of student progress and checks completion and total hours finished."""
     # df = pd.DataFrame(prepped_df)
+    last_checked = last_check
     df = prepped_df
     print(df)
-    last_checked = data.log_check().strftime("%Y-%m-%d %H:%M")
     print("last check: ", last_checked)
     chapters = [
         "Chapter 1",
