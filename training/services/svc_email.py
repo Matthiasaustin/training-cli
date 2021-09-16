@@ -153,6 +153,7 @@ class Message:
         name = self.name
         month = self.month
         print(update_info)
+        cohort = self.recipient['cohort1']
         hours_completed = update_info.iloc[0]["Hours Completed Since Last Check"]
         institution = update_info.iloc[0]["Institution"]
         print(name,institution,hours_completed)
@@ -189,8 +190,12 @@ class Message:
         update_info = re.sub("th>\d<\/th|th>\d\d<\/th", "th>Status<\/th", update_info)
         update_info = re.sub("th><\/th", "th>Chapter<\/th", update_info)
         if institution == 'VOAWW':
-            self.template_file= "voaww40hr.html"
+            if cohort == 'cohort_finished':
+                self.template_file = "previous_cohort.html"
+            else:
+                self.template_file= "voaww40hr.html"
             self.attachment = str(PureWindowsPath(attachments_dir / "SMH_Employees_RequestPunch.pdf"))
+
         else:
             self.template_file = "reminder_40hr.html"
         self.template = templateEnv.get_template(self.template_file)
