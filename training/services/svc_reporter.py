@@ -82,6 +82,8 @@ def main_program(get_csv=None, export_combined=None):
         rerun = input("Rerun? yes or no\n").lower()
         if rerun.lower() == "yes" or rerun.lower() == "y":
             rerun = True
+            for f in archive.glob("*.csv"):
+                f.rename(download_dir / f.name)
         else:
             rerun = False
 
