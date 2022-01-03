@@ -13,3 +13,9 @@
 /data/
 /*.un
 *~
+/email_data/send_info/
+/email_data/templates/workspace.code-workspace
+/master.csv
+*.pynb_checkpoints*
+/training/services/.ipynb_checkpoints/
+*.ipynb
