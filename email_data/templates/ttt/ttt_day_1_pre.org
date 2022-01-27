@@ -1,0 +1,11 @@
+Good Morning {{name}},
+
+This email is a reminder that the Virtual 40hr Train the Trainer's first class is starting in about 1 hour at 10:00 am.
+
+Link is included here: {{zoom_link}}
+
+Please let me know if you have any questions ahead of our start time and come ready to give your full attention and participation!
+
+See you soon,
+
+{{signature}}

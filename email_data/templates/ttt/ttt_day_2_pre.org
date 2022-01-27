@@ -1,0 +1,9 @@
+ Good Morning {{name}},
+
+ This is just a reminder that we will be starting our second class day in about 1 hour. Link included below.
+
+ Zoom Link: {{zoom_link}}
+
+ See you soon!
+
+ {{signature}}

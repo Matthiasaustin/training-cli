@@ -1,0 +1,15 @@
+Hey {{name}},
+
+As discusssed at the end of class yesterday, Day 3 is the start of a slightly new pattern of how class will run. Below is a summary, but please reach out if you have any questions!
+
+Day 3
+
+- Complete independent reviews for chapters 5 & 6, posting the results of the review activities.
+- Do a teachback with your small group at the time you agreed on during class.
+- Record a teachback from chapters 5 & 6 and post by the end of the day
+- Meet with the whole group from 3:00 pm to 4:00 pm ({{zoom_link}})
+
+Reach out with any questions!
+
+{{signature}}
+  

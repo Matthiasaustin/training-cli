@@ -1,0 +1,9 @@
+Hello {{name}},
+
+This message is a reminder that the Peer Coaching course ends in 10 days.
+
+It looks like you
+
+Please reach out with any questions!
+
+{{signature}}

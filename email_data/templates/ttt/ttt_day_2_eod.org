@@ -1,0 +1,26 @@
+Hey {{name}},
+
+Thank you for joining us today for the start of our TTT course. Just as a reminder of what should be completed ahead of 10:00 am tomorrow:
+
+- Chapter 3 & 4 reviews posted to www.dstrainings.com (should already be completed and posted, but complete if not)
+- Record a teachback from chapter 3 or 4 and post the link (detailed instructions online)
+- Brief Feedback to your partner's video recording.
+- Discussion questions answered
+- Skimm Chapters 5 & 6 (Don't fully read, just skim!)
+- Read over Trainer Tips #2
+   
+All the detailed instructions can be found under the Day 2 section @ www.dstrainings.com (link)
+
+As discusssed at the end of class today, Day 3 is the start of a slightly new pattern of how class will run. Below is a summary, but please reach out if you have any questions!
+
+Day 3
+
+- Complete independent reviews for chapters 5 & 6, posting the results of the review activities.
+- Do a teachback with your small group at the time you agreed on during class.
+- Record a teachback from chapters 5 & 6 and post by the end of the day
+- Meet with the whole group from 3:00 pm to 4:00 pm ({{zoom_link}})
+
+
+Please reach out with any questions!
+
+{{signature}}

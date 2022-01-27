@@ -1,0 +1,13 @@
+Hey {{name}},
+
+I wanted to first say thank you for attending and being a great contributor to our class. You are going to make a great trainer.
+
+As you get back into your normal role and/or get started training please feel free to reach out with any questions you might have.
+
+Attached you'll find a certificate of completion that doubles as CE credit for this year. Make sure to file it with your agency and keep a copy for your personal records as well.
+
+Have a fanstatic weekend and beginning of your journey training the 40hr CORE.
+
+Sincerely yours,
+
+{{signature}}
