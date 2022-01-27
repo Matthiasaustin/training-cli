@@ -66,13 +66,23 @@ class Message:
         # self.opening_date = str(self.recipient["opening_date"])
         self.close_date = str(self.recipient["closing_date"])
         self.due_date = str(self.recipient["progress_due"])
+        name = self.name
+        link = self.link
+        close_date = self.close_date
+        status = self.status
+        print("Status: ", status)
+        if status.strip() == "Completed":
+            self.template_file = 'cpr_reminder_complete.html'
+            print("Completed")
+        if status.strip() == 'In Progress' or status.strip() == "Registered/Not Started":
+            self.template_file = 'cpr_reminder_inprogress.html'
+            print("IP/NS")
+        if status.strip() == 'Not Registered':
+            self.template_file = 'cpr_reminder_not_started.html'
+            print("NR")
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         template = templateEnv.get_template(self.template_file)
-        name = self.name
-        link = self.link
-        status = self.status
-        close_date = self.close_date
         self.outputText = template.render( signature=self.signature,
                                            name=name,link=link, close_date=close_date, status=self.status
         )  # Include args for render
@@ -105,15 +115,16 @@ class Message:
     def fhr_start_email(self):
         self.email = str(self.recipient["email"])
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
-        self.attachment = str(PureWindowsPath(attachments_dir / "september_2021_syllabus.pdf"))
-        # self.attachment = str(PureWindowsPath(attachments_dir / "may_ttt_2021_syllabus.pdf"))
+        self.attachment = str(PureWindowsPath(attachments_dir / "february_2022_syllabus.pdf"))
+        # self.attachment = str(PureWindowsPath(attachments_dir / "january_ttt_2022_syllabus.pdf"))
         print(self.attachment)
         self.template_file = "welcome_40hr.html"
         # self.template_file = "ttt_wrap.html"
+        # self.template_file = "ttt_welcome.html"
         self.name = str(self.recipient["firstname"])
-        self.month = "September"
+        self.month = "February"
         self.subject = f"Welcome to the {self.month} Virtual 40hr Core"
-        # self.subject = f"May Virtual TTT Wrap-up"
+        # self.subject = f"Welcome to the {self.month} Virtual 40hr Core Train the Trainer"
         self.username = str(self.recipient["username"])
         self.password = str(self.recipient["password"])
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
@@ -135,7 +146,7 @@ class Message:
         #     "../email_data/send_info/april_combined.csv"
         # )
         # update_path = PureWindowsPath(send_info_dir / 'july_combined.csv')
-        update_path = PureWindowsPath(send_info_dir / 'august_combined.csv')
+        update_path = PureWindowsPath(send_info_dir / 'master.csv')
         update_df = pd.read_csv(update_path)
         update_info = update_df.loc[
             update_df["Email address"] == self.recipient["email"]
@@ -144,13 +155,17 @@ class Message:
         date = datetime.now()
         date = date.strftime("%m/%d/%Y")
         self.subject = f"Training Reminder/Update - {date}"
-        self.template_file = "reminder_40hr.html"
         self.attachment = None
         # update_info = update_info.to_html()
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
         name = self.name
         month = self.month
+        print(update_info)
+        cohort = self.recipient['cohort1']
+        hours_completed = update_info.iloc[0]["Hours Completed Since Last Check"]
+        institution = update_info.iloc[0]["Institution"]
+        print(name,institution,hours_completed)
         update_info = update_info.loc(axis=1)[
             "Chapter 1",
             "Chapter 2",
@@ -183,24 +198,38 @@ class Message:
         )
         update_info = re.sub("th>\d<\/th|th>\d\d<\/th", "th>Status<\/th", update_info)
         update_info = re.sub("th><\/th", "th>Chapter<\/th", update_info)
+
+        if cohort == 'cohort_finished':
+            if institution == 'VOAWW':
+                self.template_file = 'previous_cohort_voaww.html'
+                self.attachment = str(PureWindowsPath(attachments_dir / "SMH_Employees_RequestPunch.pdf"))
+            else:
+                self.template_file = 'previous_cohort.html'
+        else:
+            if institution == 'VOAWW':
+                self.template_file = 'voaww40hr.html'
+                self.attachment = str(PureWindowsPath(attachments_dir / "SMH_Employees_RequestPunch.pdf"))
+            else:
+                self.template_file = "reminder_40hr.html"
+
         self.template = templateEnv.get_template(self.template_file)
         self.outputText = self.template.render( signature=self.signature,
-            name=name,  # Include args for render
-            month=month,
-            # days_left=days_left,
-            update_info=update_info,
-        )
+                                                name=name,  # Include args for render
+                                                month=month,
+                                                hours_completed=hours_completed,
+                                                # days_left=days_left,
+                                                update_info=update_info,
+                                               )
 
     def peer_coaching(self):
         self.email = str(self.recipient["email"])
+
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
-        self.attachment = PATH = os.path.abspath(
-            "../email_data/attachments/virtual_peer_coaching_handouts.pdf"
-        )
+        self.attachment = str(PureWindowsPath(attachments_dir / "virtual_peer_coaching_handouts.pdf"))
         self.template_file = "peer_coaching.html"
         self.name = str(self.recipient["firstname"])
-        self.month = "March"
-        self.subject = f"March Virtual Peer Coaching Class Information"
+        self.month = "February"
+        self.subject = f"{self.month} Virtual Peer Coaching Class Information"
         self.username = str(self.recipient["username"])
         self.password = str(self.recipient["password"])
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
@@ -275,6 +304,10 @@ def make_email(recipient, message_type):
     mail.HtmlBody = text
 
     mail.Save()
+    # question = input("Do you want to just send?")
+    # if question == "y":
+    #     print("Sending Now")
+        # mail.Send()
 
 
 # import_address

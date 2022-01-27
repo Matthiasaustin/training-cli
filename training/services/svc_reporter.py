@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import datetime
 import training.services.svc_report_data as data
 import training.services.svc_report_maker as report_maker
+import training.services.svc_completion as completion
 import config
 
 
@@ -37,9 +38,11 @@ def main_program(get_csv=None, export_combined=None):
         pass
 
     data_dir = main_dir / "data"
+    download_dir = Path.home() / "Downloads"
     date = datetime.now().strftime("%Y%m%d")
     current_month = datetime.now().date().strftime("%B").lower()
 
+    last_checked = data.log_check().strftime("%Y-%m-%d %H:%M")
     # make a directory for the data from today
     archive_dir = data_dir / f"Data{date}"
     try:
@@ -59,6 +62,7 @@ def main_program(get_csv=None, export_combined=None):
 
         download_files = download_dir.glob("completion-*")
         months = []
+        master = pd.DataFrame()
         for f in download_files:
             f = str(f)
             months.append(data.get_month(f))
@@ -66,20 +70,78 @@ def main_program(get_csv=None, export_combined=None):
         for month in months:
             csv = data.import_data(month, data_dir, download_dir)
             record = report_maker.parse_data(csv, export_combined)
+            master.append(record)
+            print(record[0])
+            print(record[1])
+            record[0],record[1] = completion.check_completion(record[0],last_checked), completion.check_completion(record[1],last_checked)
             data.export_to_excel(record)
-            sola, voa = record
-            records.append(voa)
+            sola, voa, combined_report = record
+            records.append(combined_report)
             for f in data_dir.glob("*.csv"):
                 f.rename(archive / f.name)
         rerun = input("Rerun? yes or no\n").lower()
         if rerun.lower() == "yes" or rerun.lower() == "y":
             rerun = True
+            for f in archive.glob("*.csv"):
+                f.rename(download_dir / f.name)
         else:
             rerun = False
-    try:
-        result = pd.concat(records, axis=0)
-    except ValueError:
-        print("Nothing to combine.")
+
+        #added to reset csv data files during testing.
+        # for f in archive.glob("*.csv"):
+        #     f.rename(download_dir / f.name)
+        # Combine and format the collected VOA records in one df
+        c_rec = pd.concat(records)
+        export_dir = main_dir / "export"
+        # c_rec = data.prep_df(c_rec)
+        c_rec = c_rec.reset_index()
+        c_rec = c_rec.reindex(
+            columns=[
+                "Department",
+                "Name",
+                "Email address",
+                "Institution",
+                "ID number",
+                "Month",
+                "Chapter 1",
+                "Chapter 2",
+                "Chapter 3",
+                "Due Date #1",
+                "Chapter 4",
+                "Chapter 13",
+                "Chapter 14",
+                "Due Date #2",
+                "Chapter 5",
+                "Chapter 6",
+                "Chapter 7",
+                "Due Date #3",
+                "Chapter 8",
+                "Chapter 11",
+                "Due Date #4",
+                "Chapter 9",
+                "Chapter 10",
+                "Chapter 12",
+                "Due Date #5",
+                # "Chapter 12 Skills Lab",
+                "Total Hours Completed",
+                "Hours Completed Since Last Check",
+                "Total Hours Outstanding",
+            ]
+        )
+
+        c_rec = completion.check_completion(c_rec,last_checked)
+        c_rec.to_csv(export_dir / "master.csv")
+        # print(c_rec)
+        # # print(records[0])
+        # # print("\n*** Records List Start ***\n",records,"\n*** Records End ***\n")
+        # for i in records[1:-1]:
+        #     # print(i,"#########\n")
+        #     c_rec.append(i)
+        print(c_rec)
+
+    #added to reset csv data files during testing.
+    # for f in archive.glob("*.csv"):
+    #     f.rename(download_dir / f.name)
 
 
 def run_single_report(export_combined=None):
