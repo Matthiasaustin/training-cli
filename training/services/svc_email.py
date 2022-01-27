@@ -115,17 +115,16 @@ class Message:
     def fhr_start_email(self):
         self.email = str(self.recipient["email"])
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
-        self.attachment = str(PureWindowsPath(attachments_dir / "january_2022_syllabus.pdf"))
-        # self.attachment = str(PureWindowsPath(attachments_dir / "september_ttt_2021_syllabus.pdf"))
+        self.attachment = str(PureWindowsPath(attachments_dir / "february_2022_syllabus.pdf"))
+        # self.attachment = str(PureWindowsPath(attachments_dir / "january_ttt_2022_syllabus.pdf"))
         print(self.attachment)
         self.template_file = "welcome_40hr.html"
         # self.template_file = "ttt_wrap.html"
         # self.template_file = "ttt_welcome.html"
         self.name = str(self.recipient["firstname"])
-        self.month = "January"
+        self.month = "February"
         self.subject = f"Welcome to the {self.month} Virtual 40hr Core"
         # self.subject = f"Welcome to the {self.month} Virtual 40hr Core Train the Trainer"
-        # self.subject = f"May Virtual TTT"
         self.username = str(self.recipient["username"])
         self.password = str(self.recipient["password"])
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
@@ -229,7 +228,7 @@ class Message:
         self.attachment = str(PureWindowsPath(attachments_dir / "virtual_peer_coaching_handouts.pdf"))
         self.template_file = "peer_coaching.html"
         self.name = str(self.recipient["firstname"])
-        self.month = "January"
+        self.month = "February"
         self.subject = f"{self.month} Virtual Peer Coaching Class Information"
         self.username = str(self.recipient["username"])
         self.password = str(self.recipient["password"])
@@ -305,8 +304,9 @@ def make_email(recipient, message_type):
     mail.HtmlBody = text
 
     mail.Save()
-    question = input("Do you want to just send?")
-    if question == "y":
+    # question = input("Do you want to just send?")
+    # if question == "y":
+    #     print("Sending Now")
         # mail.Send()
 
 
