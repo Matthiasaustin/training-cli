@@ -153,3 +153,26 @@ Day 3
   We will meet together again Friday at 10:00 am. I'll be available for questions or to just talk from 9:15 onwards in the same Zoom link as usual. 
 
   Let me know if you have any questions!
+
+1.
+
+* List
+        1. Initial Welcome Email
+        2. Day 1 Pre Class
+        3. Day 1 EOD
+        4. Day 2 Pre Class
+        5. Day 2 EOD
+        6. Day 3 Overview
+        7. Day 3 EOD
+        8. Day 4 Overview
+        9. Day 4 EOD
+        10. Day 5 Overview
+        11. Day 5 EOD
+        12. Day 6 Overview
+        13. Day 6 EOD
+        14. Day 7 Overview
+        15. Day 7 EOD
+        16. Day 8 Overview
+        17. Day 8 EOD
+        18. Day 9 Overview
+        19. Day 10 Overview (Training Wrap up)

@@ -264,6 +264,39 @@ class Message:
             month=month,
         )
 
+    def ttt(self):
+        self.email = str(self.recipient["email"])
+        self.name = str(self.recipient["firstname"])
+        print = """
+        1. Initial Welcome Email
+        2. Day 1 Pre Class
+        3. Day 1 EOD
+        4. Day 2 Pre Class
+        5. Day 2 EOD
+        6. Day 3 Overview
+        7. Day 3 EOD
+        8. Day 4 Overview
+        9. Day 4 EOD
+        10. Day 5 Overview
+        11. Day 5 EOD
+        12. Day 6 Overview
+        13. Day 6 EOD
+        14. Day 7 Overview
+        15. Day 7 EOD
+        16. Day 8 Overview
+        17. Day 8 EOD
+        18. Day 9 Overview
+        19. Day 10 Overview (Training Wrap up)
+        """
+        message = input("Which message would you like to use? Input number below:\n")
+
+        #dictionary of options, switch for selection
+
+        # Select subject and message based on input and dictionary selection.
+        self.template_file = "peer_coaching_reminder.html"
+        self.subject = f"Reminder: March Virtual Peer Coaching Class"
+
+
     def get_body(self):
         return self.outputText
 
@@ -337,6 +370,7 @@ def start(csv_name=None, message_type=None):
     * reminder40 (40hr Reminder message)
     * peer (Peer Coaching)
     * peerR (Peer Coaching Reminder #1)
+    * ttt
     Choice:
     """
     if message_type is None:
