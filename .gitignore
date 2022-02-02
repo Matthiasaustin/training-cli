@@ -19,3 +19,6 @@
 *.pynb_checkpoints*
 /training/services/.ipynb_checkpoints/
 *.ipynb
+/new_cohort_docs/new_user_import.csv
+/training/services/CPR_export_2022-01-13.csv
+/new_cohort_docs/_2021/new_user_import.csv

@@ -1,0 +1,7 @@
+Hello {{name}},
+
+This email is just a reminder that the first set of courses has opened up at www.dstrainings.com. The first three chapters are due next Wednesday.
+
+Please refer to your original welcome email for more information!
+
+{{signature}}
