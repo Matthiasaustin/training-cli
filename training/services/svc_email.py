@@ -304,10 +304,10 @@ def make_email(recipient, message_type):
     mail.HtmlBody = text
 
     mail.Save()
+    # mail.Send()
     # question = input("Do you want to just send?")
     # if question == "y":
     #     print("Sending Now")
-        # mail.Send()
 
 
 # import_address
