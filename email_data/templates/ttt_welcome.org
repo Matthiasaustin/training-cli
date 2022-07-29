@@ -1,17 +1,17 @@
 Hello {{ name }},
 
-You’re receiving this message because you are on our list as a student of the Virtual Train the Trainer starting May 17th.
+You’re receiving this message because you are on our list as a student of the Virtual Train the Trainer starting May 16th.
 
-Our first meeting is on Monday, May 17th starting at 10:00 am. I look forward to seeing you there!
+Our first meeting is on Monday, May 16th starting at 10:00 am. I look forward to seeing you there!
 
-Here is the link for the meeting on Zoom: https://us02web.zoom.us/j/83241742428. If for some reason that link is having technical difficulties we will send you a new one to this email address.
+Here is the link for the meeting on Zoom: https://us02web.zoom.us/j/86792595026. If for some reason that link is having technical difficulties we will send you a new one to this email address.
 
-Ahead of our first meeting on the 17th, there are a few things we need from you:
+Ahead of our first meeting on the 16th, there are a few things we need from you:
 
   - Log in to www.dstrainings.com (details below)
   - Review the syllabus (attached here)
   - Optional: Create an account at youtube.com for uploading videos. We will discuss this more in the first class.
-  - Optional: Download and install OBS (www.obsproject.com). If you do not do this before Monday it is okay as we will walk through the process.
+  # - Optional: Download and install OBS (www.obsproject.com). If you do not do this before Monday it is okay as we will walk through the process.
 
 Logging in to www.dstrainings.com:
 

@@ -1,4 +1,5 @@
 import pandas as pd
+import time
 import jinja2
 from pathlib import Path, PureWindowsPath
 import os
@@ -26,9 +27,18 @@ class Message:
         self.attachment = None
         self.template = ""
         self.outputText = "None has been specified. Please run a constructor"
-        self.signature = """<p>Matthias Austin <br>Training Coordinator</p>
-    <p>DS Training Team <br>Volunteers of America Western Washington | voaww.org<br> maustin@voaww.org | training@voaww.org</p>
-    <p style="font-size: .5em;">This e-mail is meant for only the intended recipient, and may be a communication privileged by law. If you received this e-mail in error, any review, use, dissemination, distribution, or copying of this e-mail is strictly prohibited - please notify us immediately of the error and please delete this message from your system. Thank you.</p>"""
+        self.signature ="""<p>Matthias Austin (he/him/his)</p>
+        <p>Training Director<br/>
+        DS Training Team<br/>
+        Volunteers of America Western Washington | voaww.org<br/>
+        2802 Broadway | Everett, WA 98201<br/>
+        PO Box 839| Everett, WA 98206-0839<br/>
+        maustin@voaww.org | training@voaww.org</p>
+
+        <p style="font-size: .5em;">This e-mail is meant for only the intended recipient, and may be a communication privileged by law. If you received this e-mail in error, any review, use, dissemination, distribution, or copying of this e-mail is strictly prohibited - please notify us immediately of the error and please delete this message from your system. Thank you.</p>
+        """
+        self.month = "August"
+
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
 
@@ -115,16 +125,19 @@ class Message:
     def fhr_start_email(self):
         self.email = str(self.recipient["email"])
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
-        self.attachment = str(PureWindowsPath(attachments_dir / "march_2022_syllabus.pdf"))
-        # self.attachment = str(PureWindowsPath(attachments_dir / "january_ttt_2022_syllabus.pdf"))
+        self.attachment = str(PureWindowsPath(attachments_dir / "august_2022_syllabus.pdf"))
+        # self.attachment = str(PureWindowsPath(attachments_dir / "july_vttt_2022_syllabus.pdf"))
         print(self.attachment)
         self.template_file = "welcome_40hr.html"
+        # self.template_file = "welcome_40hr_late.html"
+        # self.template_file = "start40.html"
+
         # self.template_file = "ttt_wrap.html"
         # self.template_file = "ttt_welcome.html"
         self.name = str(self.recipient["firstname"])
-        self.month = "March"
         self.subject = f"Welcome to the {self.month} Virtual 40hr Core"
         # self.subject = f"Welcome to the {self.month} Virtual 40hr Core Train the Trainer"
+        # self.subject = f"{self.month} vTTT Wrap-up"
         self.username = str(self.recipient["username"])
         self.password = str(self.recipient["password"])
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
@@ -228,7 +241,6 @@ class Message:
         self.attachment = str(PureWindowsPath(attachments_dir / "virtual_peer_coaching_handouts.pdf"))
         self.template_file = "peer_coaching.html"
         self.name = str(self.recipient["firstname"])
-        self.month = "March"
         self.subject = f"{self.month} Virtual Peer Coaching Class Information"
         self.username = str(self.recipient["username"])
         self.password = str(self.recipient["password"])
@@ -251,7 +263,6 @@ class Message:
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
         self.template_file = "peer_coaching_reminder.html"
         self.name = str(self.recipient["firstname"])
-        self.month = "March"
         self.subject = f"Reminder: March Virtual Peer Coaching Class"
         PATH = PureWindowsPath(main_dir / 'email_data/templates')
         templateLoader = jinja2.FileSystemLoader(searchpath=PATH)
@@ -303,8 +314,9 @@ def make_email(recipient, message_type):
         mail.Attachments.Add(Source=message.attachment)
     mail.HtmlBody = text
 
-    mail.Save()
-    # mail.Send()
+    # mail.Save()
+    print(f"Sending message to {message.email}")
+    mail.Send()
     # question = input("Do you want to just send?")
     # if question == "y":
     #     print("Sending Now")
@@ -347,6 +359,8 @@ def start(csv_name=None, message_type=None):
     print(csv_name, message_type, PATH)
 
     recipients = pd.read_csv(PATH)
+    # print("Sending directly in 30 seconds")
+    # time.sleep(30)
     for recipient_row in recipients.iterrows():
 
         make_email(recipient_row, message_type)

@@ -106,4 +106,4 @@ def get_ce():
 
 
 if __name__ == "__main__":
-    due_date_list()
+    get_due_date_list()
