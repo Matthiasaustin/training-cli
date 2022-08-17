@@ -128,8 +128,8 @@ class Message:
         self.attachment = str(PureWindowsPath(attachments_dir / "august_2022_syllabus.pdf"))
         # self.attachment = str(PureWindowsPath(attachments_dir / "july_vttt_2022_syllabus.pdf"))
         print(self.attachment)
-        self.template_file = "welcome_40hr.html"
-        # self.template_file = "welcome_40hr_late.html"
+        # self.template_file = "welcome_40hr.html"
+        self.template_file = "welcome_40hr_late.html"
         # self.template_file = "start40.html"
 
         # self.template_file = "ttt_wrap.html"
@@ -314,9 +314,9 @@ def make_email(recipient, message_type):
         mail.Attachments.Add(Source=message.attachment)
     mail.HtmlBody = text
 
-    # mail.Save()
+    mail.Save()
     print(f"Sending message to {message.email}")
-    mail.Send()
+    # mail.Send()
     # question = input("Do you want to just send?")
     # if question == "y":
     #     print("Sending Now")
