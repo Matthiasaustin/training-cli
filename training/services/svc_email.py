@@ -37,7 +37,7 @@ class Message:
 
         <p style="font-size: .5em;">This e-mail is meant for only the intended recipient, and may be a communication privileged by law. If you received this e-mail in error, any review, use, dissemination, distribution, or copying of this e-mail is strictly prohibited - please notify us immediately of the error and please delete this message from your system. Thank you.</p>
         """
-        self.month = "August"
+        self.month = "October"
 
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
         templateEnv = jinja2.Environment(loader=templateLoader)
@@ -125,8 +125,8 @@ class Message:
     def fhr_start_email(self):
         self.email = str(self.recipient["email"])
         self.supervisor_email = str(self.recipient["profile_field_supervisor_email"])
-        self.attachment = str(PureWindowsPath(attachments_dir / "august_2022_syllabus.pdf"))
-        # self.attachment = str(PureWindowsPath(attachments_dir / "july_vttt_2022_syllabus.pdf"))
+        self.attachment = str(PureWindowsPath(attachments_dir / "october_2022_syllabus.pdf"))
+        # self.attachment = str(PureWindowsPath(attachments_dir / "september_vttt_2022_syllabus.pdf"))
         print(self.attachment)
         # self.template_file = "welcome_40hr.html"
         self.template_file = "welcome_40hr_late.html"
@@ -134,10 +134,12 @@ class Message:
 
         # self.template_file = "ttt_wrap.html"
         # self.template_file = "ttt_welcome.html"
-        self.name = str(self.recipient["firstname"])
+
         self.subject = f"Welcome to the {self.month} Virtual 40hr Core"
         # self.subject = f"Welcome to the {self.month} Virtual 40hr Core Train the Trainer"
-        # self.subject = f"{self.month} vTTT Wrap-up"
+        # self.subject = "September vTTT Wrap-up"
+
+        self.name = str(self.recipient["firstname"])
         self.username = str(self.recipient["username"])
         self.password = str(self.recipient["password"])
         templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
@@ -275,6 +277,34 @@ class Message:
             month=month,
         )
 
+    def other(self):
+
+        # Add values to pull from the spreadsheet for the email template here
+        self.email = str(self.recipient["email"])
+        self.name = str(self.recipient["first_name"])
+        self.code= str(self.recipient["code"])
+
+        # Add attachment here
+        # self.attachment = str(PureWindowsPath(attachments_dir / " "))
+        # print(self.attachment)
+
+        # Email template
+        self.template_file = "keymakers_welcome.html"
+
+        # Email Subject line
+        self.subject = f"KeyMakers - Welcome and Session 1"
+
+        # Load and populate template
+        templateLoader = jinja2.FileSystemLoader(searchpath=templates_dir)
+        templateEnv = jinja2.Environment(loader=templateLoader)
+        self.template = templateEnv.get_template(self.template_file)
+        name = self.name
+        code = self.code
+        self.outputText = self.template.render( signature=self.signature,
+            name=name,  # Include args for render
+            code=code,
+        )
+
     def get_body(self):
         return self.outputText
 
@@ -304,9 +334,15 @@ def make_email(recipient, message_type):
         message.peer_coaching()
     elif message_type == "peerR":
         message.peer_coaching_reminder()
+    elif message_type == "other":
+        message.other()
 
     mail.To = message.email
-    mail.CC = message.supervisor_email
+    try:
+        mail.CC = message.supervisor_email
+    except:
+        print(f"No supervisor/email listed for {message.email}. Sending without any.")
+        pass
     text = message.get_body()
 
     mail.Subject = message.subject
@@ -349,6 +385,7 @@ def start(csv_name=None, message_type=None):
     * reminder40 (40hr Reminder message)
     * peer (Peer Coaching)
     * peerR (Peer Coaching Reminder #1)
+    * other
     Choice:
     """
     if message_type is None:

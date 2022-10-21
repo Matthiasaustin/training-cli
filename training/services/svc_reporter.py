@@ -69,7 +69,7 @@ def main_program(get_csv=None, export_combined=None):
             months = list(set(months))
         for month in months:
             csv = data.import_data(month, data_dir, download_dir)
-            record = report_maker.parse_data(csv, export_combined)
+            record = report_maker.parse_data(csv, export_combined=None)
             master.append(record)
             print(record[0])
             print(record[1])

@@ -169,7 +169,7 @@ def parse_data(list_of_df, export_combined=None):
 
 def main():
     csv = data.import_data()
-    x = parse_data(csv, export_combined=True)
+    x = parse_data(csv, export_combined=None)
     # data.export_as_csv(x)
     data.export_to_excel(x)
 
